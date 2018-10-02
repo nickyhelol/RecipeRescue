@@ -1,16 +1,22 @@
 package com.nickhe.reciperescue;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import java.util.ArrayList;
 
+/**
+ * This is the model for user with different attributes.
+ *
+ * TODO add new feature to the database including recipes. Probably need to extend Json tree.
+ */
 public class User {
 
     private String age;
     private String email;
     private String name;
     private String description;        //New added feature
-    private Bitmap profileImage;
+    private Uri profileImage;
     private ArrayList<Recipe> personalRepo;
 
     public User(){
@@ -55,11 +61,11 @@ public class User {
         this.description = description;
     }
 
-    public Bitmap getProfileImage() {
+    public Uri getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(Bitmap profileImage) {
+    public void setProfileImage(Uri profileImage) {
         this.profileImage = profileImage;
     }
 
