@@ -3,10 +3,11 @@ A recipe sharing application which is designed to encourage people to share thei
 
 ## Demo
  <img src="images/img1.png" width="300">
- <img src="images/img2.png" width="300">
+ <img src="images/signup.png" width="300">
+ <img src="images/signin.png" width="300">
  <img src="images/img3.png" width="300">
  <img src="images/img4.png" width="300">
- <img src="images/img5.png" width="300">
+ <img src="images/search.png" width="300">
  <img src="images/img6.png" width="300">
  <img src="images/img7.png" width="300">
 

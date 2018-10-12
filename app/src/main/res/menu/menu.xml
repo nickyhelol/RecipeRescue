@@ -7,7 +7,6 @@
         android:orderInCategory="100"
         app:showAsAction="withText"
         android:title="Logout">
-
     </item>
 
 </menu>

@@ -2,6 +2,8 @@ package com.nickhe.reciperescue;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -20,9 +22,8 @@ import java.net.URI;
  * h. recipeRating - The rating of the recipe
  * i. recipeImage - The image of the recipe
  */
-public class Recipe implements Serializable {
+public class Recipe implements Parcelable {
 
-    private int id;
     private String recipeTitle;
     private String[] recipeIngredients;
     private String recipePublisher;
@@ -45,21 +46,10 @@ public class Recipe implements Serializable {
         this.recipePublisher = recipePublisher;
     }
 
-    public Recipe(String recipeTitle, String[] recipeIngredients, String time, String calories, String[] recipeInstruction, Uri recipeImageUri) {
-        this.time = time;
-        this.recipeTitle = recipeTitle;
-        this.recipeIngredients = recipeIngredients;
-        this.calories = calories;
-        this.recipeInstruction = recipeInstruction;
-        this.recipeImageUri = recipeImageUri;
-        this.recipeRating = Rating.THREE;
-    }
-
     /**
      * Proper constructor for the recipe object, contains all the required fields for the recipe.
      * Should be used in all cases.
      *
-     * @param id                id of the recipe
      * @param recipeTitle       title of the recipe
      * @param recipeIngredients ingredients required for the recipe
      * @param recipePublisher   publisher of the recipe
@@ -68,8 +58,7 @@ public class Recipe implements Serializable {
      * @param recipeInstruction instructions for cooking
      * @param recipeImageUri       image of the recipe
      */
-    public Recipe(int id, String recipeTitle, String[] recipeIngredients, String recipePublisher, String time, String calories, String[] recipeInstruction, Uri recipeImageUri) {
-        this.id = id;
+    public Recipe(String recipeTitle, String[] recipeIngredients, String recipePublisher, String time, String calories, String[] recipeInstruction, Uri recipeImageUri) {
         this.recipeTitle = recipeTitle;
         this.recipeIngredients = recipeIngredients;
         this.recipePublisher = recipePublisher;
@@ -77,6 +66,45 @@ public class Recipe implements Serializable {
         this.calories = calories;
         this.recipeInstruction = recipeInstruction;
         this.recipeImageUri = recipeImageUri;
+    }
+
+    protected Recipe(Parcel in) {
+        recipeTitle = in.readString();
+        recipeIngredients = in.createStringArray();
+        recipePublisher = in.readString();
+        time = in.readString();
+        calories = in.readString();
+        recipeInstruction = in.createStringArray();
+        recipeImageUri = in.readParcelable(Uri.class.getClassLoader());
+    }
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(recipeTitle);
+        dest.writeStringArray(recipeIngredients);
+        dest.writeString(recipePublisher);
+        dest.writeString(time);
+        dest.writeString(calories);
+        dest.writeStringArray(recipeInstruction);
+        dest.writeParcelable(recipeImageUri, flags);
     }
 
     public Uri getRecipeImage() {
@@ -143,11 +171,4 @@ public class Recipe implements Serializable {
         this.calories = calories;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 }

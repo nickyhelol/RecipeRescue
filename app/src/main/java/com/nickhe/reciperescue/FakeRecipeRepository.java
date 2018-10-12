@@ -21,7 +21,6 @@ public class FakeRecipeRepository {
             , R.drawable.food5, R.drawable.food6, R.drawable.food7, R.drawable.food8};
 
     public FakeRecipeRepository(Activity context)
-
     {
         fakeRepo = new ArrayList<>();
         this.context = context;
@@ -58,7 +57,6 @@ public class FakeRecipeRepository {
         Uri food8 = Uri.parse("android.resource://com.nickhe.reciperescue/drawable/"+images[7]);
 
         Recipe r1 = new Recipe(
-                0,
                 "Chicken And Lemon Kebabs",
                 new String[]{
                         "460 grams chicken thigh fillets",
@@ -85,7 +83,6 @@ public class FakeRecipeRepository {
         );
 
         Recipe r2 = new Recipe(
-                1,
                 "Asian Chicken Salad With Ginger Sesame Dressing",
                 new String[]{
                         "1/4 cup rice wine vinegar",
@@ -114,7 +111,6 @@ public class FakeRecipeRepository {
         );
 
         Recipe r3 = new Recipe(
-                2,
                 "Grilled Salmon",
                 new String[]{
                         "salt",
@@ -138,7 +134,6 @@ public class FakeRecipeRepository {
         );
 
         Recipe r4 = new Recipe(
-                3,
                 "Spicy Lime Grilled Chicken",
                 new String[]{
                         "6 boneless, skinless chicken breast halves",
@@ -166,7 +161,6 @@ public class FakeRecipeRepository {
         );
 
         Recipe r5 = new Recipe(
-                4,
                 "Lightened Up Curry Egg Salad",
                 new String[]{
                         "8 large eggs",
@@ -189,7 +183,6 @@ public class FakeRecipeRepository {
         );
 
         Recipe r6 = new Recipe(
-                5,
                 "Barbecue Chicken Pizza",
                 new String[]{
                         "1 pizza crust",
@@ -212,7 +205,6 @@ public class FakeRecipeRepository {
         );
 
         Recipe r7 = new Recipe(
-                6,
                 "Thai Pineapple Fried Rice",
                 new String[]{
                         "1 cup quinoa",
@@ -239,7 +231,6 @@ public class FakeRecipeRepository {
         );
 
         Recipe r8 = new Recipe(
-                7,
                 "Very Veggie Fried Rice",
                 new String[]{
                         "3 cups brown rice",
@@ -277,7 +268,6 @@ public class FakeRecipeRepository {
         getFakeRepo().add(r6);
         getFakeRepo().add(r7);
         getFakeRepo().add(r8);
-
     }
 
     public List<Recipe> getFakeRepo() {
