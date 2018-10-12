@@ -30,44 +30,15 @@ import java.util.regex.Pattern;
 public class RegisterToFirebaseActivity extends AppCompatActivity {
 
 
-    private EditText name, password, email, ageOfUser;
-    private Button registerButton;
-    private TextView userLoginView;
+    private EditText emailEditText, passwordEditText;
+    private Button signUpBtn;
+    private TextView loginTextView, errorTextView;
+    private String userPassword, userEmail;
+
     private FirebaseAuth firebaseAuth;
-    private String userName, userPassword, userEmail, userAge;
-    //adding firebase storage object
-    private FirebaseStorage firebaseStorage;
-    private TextView errorTextView;
+    private FirebaseStorage firebaseStorage;  //Unused field
 
-    /**
-     * This method check if the given email address is valid or not.
-     *
-     * @param email email address
-     * @return true if the email is valid and false otherwise
-     */
-    public static boolean isEmailValid(String email) {
-        boolean isValid = false;
 
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        CharSequence inputStr = email;
-
-        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(inputStr);
-        if (matcher.matches()) {
-            isValid = true;
-        }
-        return isValid;
-    }
-
-    /**
-     * This method checks if the given password is valid or not.
-     *
-     * @param password password
-     * @return true if the password is valid and false otherwise
-     */
-    public static boolean isPasswordValid(String password) {
-        return password.length() >= 6;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,14 +50,14 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
         firebaseStorage = FirebaseStorage.getInstance();
 
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //first we need to validate if user has entered all fields required to register.
                 if (validate()) {
                     //upload data to the database.
-                    String user_email = email.getText().toString().trim();
-                    String user_password = password.getText().toString().trim();
+                    String user_email = emailEditText.getText().toString().trim();
+                    String user_password = passwordEditText.getText().toString().trim();
 
                     firebaseAuth.createUserWithEmailAndPassword(user_email, user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -111,7 +82,7 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
             }
         });
 
-        userLoginView.setOnClickListener(new View.OnClickListener() {
+        loginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(RegisterToFirebaseActivity.this, MainLoginActivity.class));
@@ -130,13 +101,11 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
      * This method initialize the variables.
      */
     private void initializeViews() {
-        name = (EditText) findViewById(R.id.updateNameET);
-        password = (EditText) findViewById(R.id.userPasswordField);
-        email = (EditText) findViewById(R.id.updateEmailET);
-        registerButton = (Button) findViewById(R.id.registerButton);
-        userLoginView = (TextView) findViewById(R.id.userLoginView);
-        ageOfUser = (EditText) findViewById(R.id.updateAgeET);
-        errorTextView = findViewById(R.id.errorDetailsView);
+        emailEditText = findViewById(R.id.emailEditText_signUp);
+        passwordEditText = findViewById(R.id.passwordEditText_singUp);
+        signUpBtn = findViewById(R.id.signUpBtn);
+        loginTextView = findViewById(R.id.loginTextView);
+        errorTextView = findViewById(R.id.errorTextView_signUp);
 
 
     }
@@ -146,19 +115,17 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
      */
     private Boolean validate() {
         Boolean result = false;
-        userName = this.name.getText().toString();
-        userPassword = this.password.getText().toString();
-        userEmail = this.email.getText().toString();
-        userAge = ageOfUser.getText().toString();
+        userEmail = this.emailEditText.getText().toString();
+        userPassword = this.passwordEditText.getText().toString();
 
-        if (userName.isEmpty() || userPassword.isEmpty() || userEmail.isEmpty() || userAge.isEmpty()) {
+        if (userEmail.isEmpty() || userPassword.isEmpty()) {
             errorTextView.setText("Please enter all the details");
             Toast.makeText(this, "Please enter all the details", Toast.LENGTH_SHORT).show();
         } else if (!(isEmailValid(userEmail))) {
             errorTextView.setText("Please provide valid email");
 
         } else if (!isPasswordValid(userPassword)) {
-            errorTextView.setText("Password must be at least 6 character");
+            errorTextView.setText("Password must be at least 6 characters");
         } else {
             errorTextView.setText("");
             result = true;
@@ -204,12 +171,41 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
         DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());//getting the UID of the user from the firebase console.
 
         //Creating user object
-        User user = new User(userName, userAge, userEmail);
+        User user = new User(userEmail);
 
         //since the database reference need an object of class, we created the object of user class, and assigned the value
         //as per the constructor to pass into the database reference.
         databaseReference.setValue(user);
     }
 
+    /**
+     * This method check if the given email address is valid or not.
+     *
+     * @param email email address
+     * @return true if the email is valid and false otherwise
+     */
+    public static boolean isEmailValid(String email) {
+        boolean isValid = false;
+
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
+    }
+
+    /**
+     * This method checks if the given password is valid or not.
+     *
+     * @param password password
+     * @return true if the password is valid and false otherwise
+     */
+    public static boolean isPasswordValid(String password) {
+        return password.length() >= 6;
+    }
 
 }

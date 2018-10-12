@@ -35,8 +35,6 @@
         <activity android:name=".MainLoginActivity" />
         <activity android:name=".PasswordUpdate" />
         <activity android:name=".RegisterToFirebaseActivity" />
-        <activity android:name=".UpdateUserProfileActivity" />
-        <activity android:name=".UserProfileActivity" />
         <activity android:name=".RecipeViewActivity" />
         <activity android:name=".TestActivity" />
         <activity

@@ -26,6 +26,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -37,6 +43,9 @@ public class ProfileFragment extends Fragment {
     FakeRecipeRepository fakeRecipeRepository;
     public final int READ_IMAGE_PERMISSION = 0;
     public final int PICK_IMAGE_RESULT = 1;
+
+    //
+    private FirebaseAuth firebaseAuth;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -72,6 +81,7 @@ public class ProfileFragment extends Fragment {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_IMAGE_PERMISSION);
         }
 
+        firebaseAuth = FirebaseAuth.getInstance();
         profileImageView = view.findViewById(R.id.profileImageView);
         listView = view.findViewById(R.id.profile_recipeList);
         fakeRecipeRepository = FakeRecipeRepository.getFakeRecipeRepository(getActivity());
@@ -114,6 +124,8 @@ public class ProfileFragment extends Fragment {
              }
          });
 
+         //sendUserDataToDatabase();
+        getUser();
     }
 
     @Override
@@ -191,5 +203,36 @@ public class ProfileFragment extends Fragment {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    public void getUser()
+    {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference(firebaseAuth.getUid());
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                System.out.println(user.getName()+" "+user.getEmail()+" "+user.getAge());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void sendUserDataToDatabase() {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());//getting the UID of the user from the firebase console.
+
+        //Creating user object
+        //User user = new User("Nick He", "30", "asdjkjl@mgalsjdkl", "description");
+
+        //since the database reference need an object of class, we created the object of user class, and assigned the value
+        //as per the constructor to pass into the database reference.
+        databaseReference.setValue(user);
     }
 }

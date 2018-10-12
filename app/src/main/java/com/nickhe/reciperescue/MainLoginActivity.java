@@ -36,16 +36,11 @@ import java.util.regex.Pattern;
 public class MainLoginActivity extends AppCompatActivity {
 
     public static User user;
-    private EditText userEmail;
-    private EditText userPassword;
-    private TextView screenInfo;
-    private Button loginBtn;
-    private int counter = 5;
-    private TextView userRegView;
+    private EditText emailEditText, passwordEditText;
+    private Button signInBtn;
+    private TextView signUpTextView, forgotPasswordTextView, errorTextView;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
-    private TextView forgotPwView;
-    private TextView errorInfoView;
 
     @Override
 
@@ -56,7 +51,6 @@ public class MainLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_login);
         initializeViews();
 
-        screenInfo.setText("No. of attempts remaining: 5");
         firebaseAuth=FirebaseAuth.getInstance();
         progressDialog= new ProgressDialog(this);
 
@@ -70,18 +64,18 @@ public class MainLoginActivity extends AppCompatActivity {
 
 
         //providing onclick function for login button
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        signInBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
 
             public void onClick(View view) {
 
-                validate(userEmail.getText().toString(), userPassword.getText().toString());
+                validate(emailEditText.getText().toString(), passwordEditText.getText().toString());
 
             }
 
         });
-        userRegView.setOnClickListener(new View.OnClickListener() {
+        signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainLoginActivity.this, RegisterToFirebaseActivity.class));
@@ -89,7 +83,7 @@ public class MainLoginActivity extends AppCompatActivity {
         });
 
         //providing onclick function for forgot password text view
-        forgotPwView.setOnClickListener(new View.OnClickListener() {
+        forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainLoginActivity.this, ForgotPasswordActivity.class));
@@ -103,16 +97,12 @@ public class MainLoginActivity extends AppCompatActivity {
      * it will show all the views to the screen
      */
     private void initializeViews(){
-        userEmail = (EditText) findViewById(R.id.userNameField);
-
-        userPassword = (EditText) findViewById(R.id.userPasswordField);
-
-        screenInfo = (TextView) findViewById(R.id.attemptsLoginInfo);
-
-        loginBtn = (Button) findViewById(R.id.loginButton);
-        userRegView = (TextView) findViewById(R.id.RegTextView);
-        forgotPwView= (TextView) findViewById(R.id.forgotPwTV);
-        errorInfoView= findViewById(R.id.infoView);
+        emailEditText = findViewById(R.id.emailEditText_signIn);
+        passwordEditText = findViewById(R.id.passwordEditText_singIn);
+        signInBtn = findViewById(R.id.signInBtn);
+        signUpTextView = findViewById(R.id.signUpTextView);
+        forgotPasswordTextView= findViewById(R.id.forgotPasswordTextView);
+        errorTextView= findViewById(R.id.errorTextView_signIn);
     }
 
 
@@ -126,39 +116,32 @@ public class MainLoginActivity extends AppCompatActivity {
     private void validate(String userEmail, String userPassword) {
 
         if(userEmail.isEmpty()){
-            errorInfoView.setText("Email address required");
+            errorTextView.setText("Email address required!");
         }
 
        else if (!isEmailValid(userEmail)){
-            errorInfoView.setText("Please enter valid email address");
+            errorTextView.setText("Please enter valid email address!");
         }
         else if(userPassword.isEmpty()){
-            errorInfoView.setText("Password required");
-
+            errorTextView.setText("Password required!");
         }
         else if(!isPasswordValid(userPassword)){
-            errorInfoView.setText("Password must be at least 6 character");
+            errorTextView.setText("Password must be at least 6 character");
         }
         else {
-            errorInfoView.setText("");
-            progressDialog.setMessage("Logging in ");
+            errorTextView.setText("");
+            progressDialog.setMessage("Logging in");
             progressDialog.show();
             firebaseAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         progressDialog.dismiss();
-
                         checkEmailVerification();
                     } else {
                         progressDialog.cancel();
-                        errorInfoView.setText("Wrong user name or password");
+                        errorTextView.setText("Wrong email address or password!");
                         Toast.makeText(MainLoginActivity.this, "Wrong user name or password", Toast.LENGTH_SHORT).show();
-                        counter--;
-                        screenInfo.setText("No of attempts remaining: " + counter);
-                        if (counter == 0) {
-                            loginBtn.setEnabled(false);
-                        }
                     }
                 }
 
@@ -227,7 +210,6 @@ public class MainLoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                System.out.println(user.getName()+" "+user.getEmail()+" "+user.getAge());
             }
 
             @Override

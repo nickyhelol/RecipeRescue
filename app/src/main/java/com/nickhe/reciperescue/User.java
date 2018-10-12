@@ -15,14 +15,12 @@ public class User {
     private String age;
     private String email;
     private String name;
-    private String description;        //New added feature
+    private String description;
     private Uri profileImage;
     private ArrayList<Recipe> personalRepo;
 
-    public User(String name, String age, String email) {
-        this.age = age;
+    public User(String email) {
         this.email = email;
-        this.name = name;
     }
 
     public User(){

@@ -1,8 +1,10 @@
 package com.nickhe.reciperescue;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import java.io.Serializable;
+import java.net.URI;
 
 /**
  * Recipe object to use in the program, should be able to be stored in the database.
@@ -28,7 +30,7 @@ public class Recipe implements Serializable {
     private String calories;
     private String[] recipeInstruction;
     private Rating recipeRating;
-    private Bitmap recipeImage;
+    private Uri recipeImageUri;
 
     /**
      * Constructor for the recipe object, minimum fields for a recipe.
@@ -43,12 +45,14 @@ public class Recipe implements Serializable {
         this.recipePublisher = recipePublisher;
     }
 
-    public Recipe(String recipeTitle, String[] recipeIngredients, String time, String calories, String[] recipeInstruction) {
+    public Recipe(String recipeTitle, String[] recipeIngredients, String time, String calories, String[] recipeInstruction, Uri recipeImageUri) {
         this.time = time;
         this.recipeTitle = recipeTitle;
         this.recipeIngredients = recipeIngredients;
         this.calories = calories;
         this.recipeInstruction = recipeInstruction;
+        this.recipeImageUri = recipeImageUri;
+        this.recipeRating = Rating.THREE;
     }
 
     /**
@@ -62,9 +66,9 @@ public class Recipe implements Serializable {
      * @param time              time required for cooking
      * @param calories          calories contained
      * @param recipeInstruction instructions for cooking
-     * @param recipeImage       image of the recipe
+     * @param recipeImageUri       image of the recipe
      */
-    public Recipe(int id, String recipeTitle, String[] recipeIngredients, String recipePublisher, String time, String calories, String[] recipeInstruction, Bitmap recipeImage) {
+    public Recipe(int id, String recipeTitle, String[] recipeIngredients, String recipePublisher, String time, String calories, String[] recipeInstruction, Uri recipeImageUri) {
         this.id = id;
         this.recipeTitle = recipeTitle;
         this.recipeIngredients = recipeIngredients;
@@ -72,15 +76,15 @@ public class Recipe implements Serializable {
         this.time = time;
         this.calories = calories;
         this.recipeInstruction = recipeInstruction;
-        this.recipeImage = recipeImage;
+        this.recipeImageUri = recipeImageUri;
     }
 
-    public Bitmap getRecipeImage() {
-        return recipeImage;
+    public Uri getRecipeImage() {
+        return recipeImageUri;
     }
 
-    public void setRecipeImage(Bitmap recipeImage) {
-        this.recipeImage = recipeImage;
+    public void setRecipeImage(Uri recipeImageUri) {
+        this.recipeImageUri = recipeImageUri;
     }
 
     public String getRecipeTitle() {

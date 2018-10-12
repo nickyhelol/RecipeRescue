@@ -1,6 +1,7 @@
 package com.nickhe.reciperescue;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -57,7 +58,8 @@ public class RecipeViewActivity extends AppCompatActivity {
         ingredientsListView = findViewById(R.id.ingredientListView);
         instructionTextView = findViewById(R.id.instructionsTextView);
 
-        recipeImage.setImageBitmap(recipe.getRecipeImage());
+        Bitmap image = ImageProcessor.convertUriToBitmap(this, recipe.getRecipeImage());
+        recipeImage.setImageBitmap(image);
         recipeTitle.setText(recipe.getRecipeTitle());
         publisherTextView.setText(recipe.getRecipePublisher());
         ingredientsTextView.setText(String.valueOf(ingredients.length));
