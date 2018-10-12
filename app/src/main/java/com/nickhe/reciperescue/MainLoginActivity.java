@@ -1,5 +1,6 @@
 package com.nickhe.reciperescue;
 
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -18,6 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,18 +35,12 @@ import java.util.regex.Pattern;
  */
 public class MainLoginActivity extends AppCompatActivity {
 
-    private EditText userEmail;
-    private EditText userPassword;
-    private TextView screenInfo;
-    private Button loginBtn;
-    private int counter = 5;
-    private TextView userRegView;
+    public static User user;
+    private EditText emailEditText, passwordEditText;
+    private Button signInBtn;
+    private TextView signUpTextView, forgotPasswordTextView, errorTextView;
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressDialog;
-    private TextView forgotPwView;
-    private TextView errorInfoView;
-
-
 
     @Override
 
@@ -50,31 +51,31 @@ public class MainLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_login);
         initializeViews();
 
-        screenInfo.setText("No. of attempts remaining: 5");
         firebaseAuth=FirebaseAuth.getInstance();
         progressDialog= new ProgressDialog(this);
 
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
-        if(user!=null){
+        if(firebaseUser!=null){
+            getUser();
             finish();//meaning if there is no user then it will stay at the main activity and have to enter sign in details again.
             startActivity(new Intent(MainLoginActivity.this,MainMenuActivity.class));
         }
 
 
         //providing onclick function for login button
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        signInBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
 
             public void onClick(View view) {
 
-                validate(userEmail.getText().toString(), userPassword.getText().toString());
+                validate(emailEditText.getText().toString(), passwordEditText.getText().toString());
 
             }
 
         });
-        userRegView.setOnClickListener(new View.OnClickListener() {
+        signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainLoginActivity.this, RegisterToFirebaseActivity.class));
@@ -82,7 +83,7 @@ public class MainLoginActivity extends AppCompatActivity {
         });
 
         //providing onclick function for forgot password text view
-        forgotPwView.setOnClickListener(new View.OnClickListener() {
+        forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainLoginActivity.this, ForgotPasswordActivity.class));
@@ -96,16 +97,12 @@ public class MainLoginActivity extends AppCompatActivity {
      * it will show all the views to the screen
      */
     private void initializeViews(){
-        userEmail = (EditText) findViewById(R.id.userNameField);
-
-        userPassword = (EditText) findViewById(R.id.userPasswordField);
-
-        screenInfo = (TextView) findViewById(R.id.attemptsLoginInfo);
-
-        loginBtn = (Button) findViewById(R.id.loginButton);
-        userRegView = (TextView) findViewById(R.id.RegTextView);
-        forgotPwView= (TextView) findViewById(R.id.forgotPwTV);
-        errorInfoView= findViewById(R.id.infoView);
+        emailEditText = findViewById(R.id.emailEditText_signIn);
+        passwordEditText = findViewById(R.id.passwordEditText_singIn);
+        signInBtn = findViewById(R.id.signInBtn);
+        signUpTextView = findViewById(R.id.signUpTextView);
+        forgotPasswordTextView= findViewById(R.id.forgotPasswordTextView);
+        errorTextView= findViewById(R.id.errorTextView_signIn);
     }
 
 
@@ -119,40 +116,32 @@ public class MainLoginActivity extends AppCompatActivity {
     private void validate(String userEmail, String userPassword) {
 
         if(userEmail.isEmpty()){
-            errorInfoView.setText("Email address required");
+            errorTextView.setText("Email address required!");
         }
 
        else if (!isEmailValid(userEmail)){
-            errorInfoView.setText("Please enter valid email address");
+            errorTextView.setText("Please enter valid email address!");
         }
         else if(userPassword.isEmpty()){
-            errorInfoView.setText("Password required");
-
+            errorTextView.setText("Password required!");
         }
         else if(!isPasswordValid(userPassword)){
-            errorInfoView.setText("Password must be at least 6 character");
+            errorTextView.setText("Password must be at least 6 character");
         }
         else {
-
-            errorInfoView.setText("");
-            progressDialog.setMessage("Logging in ");
+            errorTextView.setText("");
+            progressDialog.setMessage("Logging in");
             progressDialog.show();
             firebaseAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         progressDialog.dismiss();
-
                         checkEmailVerification();
                     } else {
                         progressDialog.cancel();
-                        errorInfoView.setText("Wrong user name or password");
+                        errorTextView.setText("Wrong email address or password!");
                         Toast.makeText(MainLoginActivity.this, "Wrong user name or password", Toast.LENGTH_SHORT).show();
-                        counter--;
-                        screenInfo.setText("No of attempts remaining: " + counter);
-                        if (counter == 0) {
-                            loginBtn.setEnabled(false);
-                        }
                     }
                 }
 
@@ -169,9 +158,9 @@ public class MainLoginActivity extends AppCompatActivity {
         FirebaseUser firebaseUser= firebaseAuth.getInstance().getCurrentUser();
         Boolean flag= firebaseUser.isEmailVerified();
 
-
         //if email is verified then link this to the second activity
         if(flag){
+            getUser();
             finish();//finishes this main activity and directs it to the second activity.
             startActivity(new Intent(MainLoginActivity.this, MainMenuActivity.class));
         }else{//if the email is not verified then send a toast message to user and sign out from the firebase
@@ -209,7 +198,25 @@ public class MainLoginActivity extends AppCompatActivity {
         return password.length() >= 6;
     }
 
+    /**
+     * Retrieve the user from the database
+     */
+    public void getUser()
+    {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+                .getReference(firebaseAuth.getUid());
 
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }

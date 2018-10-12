@@ -2,6 +2,7 @@ package com.nickhe.reciperescue;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ public class RecipeListAdapterFilterable extends RecyclerView.Adapter implements
     private List<Recipe> filteredRecipes;
     private RecipeNameFilter recipeNameFilter;
     private RecipeIngredientsFilter recipeIngredientsFilter;
+    private Activity context;
 
     /**
      * Public constructor for the RecipeListAdapter
@@ -37,6 +39,7 @@ public class RecipeListAdapterFilterable extends RecyclerView.Adapter implements
      * @param recipes Recipe list from the repository
      */
     public RecipeListAdapterFilterable(Activity context, List<Recipe> recipes) {
+        this.context = context;
         originalRecipes = recipes;
         filteredRecipes = recipes;
         recipeNameFilter = new RecipeNameFilter();
@@ -97,7 +100,10 @@ public class RecipeListAdapterFilterable extends RecyclerView.Adapter implements
         ViewHolder viewHolder = (ViewHolder) holder;
         final Recipe recipe = filteredRecipes.get(position);
         viewHolder.textView.setText(recipe.getRecipeTitle());
-        viewHolder.imageView.setImageBitmap(recipe.getRecipeImage());
+
+        //Convert image Uri to Bitmap
+        Bitmap recipeImage = ImageProcessor.convertUriToBitmap(this.context, recipe.getRecipeImage());
+        viewHolder.imageView.setImageBitmap(recipeImage);
         viewHolder.imageView.setOnClickListener(new View.OnClickListener() { //Adds an onclick listener for every recipe image in the adapter
             @Override
             public void onClick(View v) {

@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,14 +48,14 @@ public class FakeRecipeRepository {
      * Update the FakeRecipeRepository
      */
     public void initializeRepo() {
-        Bitmap food1 = BitmapFactory.decodeResource(context.getResources(), images[0]);
-        Bitmap food2 = BitmapFactory.decodeResource(context.getResources(), images[1]);
-        Bitmap food3 = BitmapFactory.decodeResource(context.getResources(), images[2]);
-        Bitmap food4 = BitmapFactory.decodeResource(context.getResources(), images[3]);
-        Bitmap food5 = BitmapFactory.decodeResource(context.getResources(), images[4]);
-        Bitmap food6 = BitmapFactory.decodeResource(context.getResources(), images[5]);
-        Bitmap food7 = BitmapFactory.decodeResource(context.getResources(), images[6]);
-        Bitmap food8 = BitmapFactory.decodeResource(context.getResources(), images[7]);
+        Uri food1 = Uri.parse("android.resource://com.nickhe.reciperescue/drawable/"+images[0]);
+        Uri food2 = Uri.parse("android.resource://com.nickhe.reciperescue/drawable/"+images[1]);
+        Uri food3 = Uri.parse("android.resource://com.nickhe.reciperescue/drawable/"+images[2]);
+        Uri food4 = Uri.parse("android.resource://com.nickhe.reciperescue/drawable/"+images[3]);
+        Uri food5 = Uri.parse("android.resource://com.nickhe.reciperescue/drawable/"+images[4]);
+        Uri food6 = Uri.parse("android.resource://com.nickhe.reciperescue/drawable/"+images[5]);
+        Uri food7 = Uri.parse("android.resource://com.nickhe.reciperescue/drawable/"+images[6]);
+        Uri food8 = Uri.parse("android.resource://com.nickhe.reciperescue/drawable/"+images[7]);
 
         Recipe r1 = new Recipe(
                 0,
