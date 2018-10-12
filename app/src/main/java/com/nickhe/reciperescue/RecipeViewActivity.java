@@ -39,24 +39,11 @@ public class RecipeViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_view);
 
-        int id = getIntent().getIntExtra("id", -1);
+        receiveData();
+        initializeView();
 
-        recipe = null;
-
-        if (id != -1) {
-            recipe = HomeFragment.fakeRecipeRepository.getFakeRepo().get(id);
-            ingredients = recipe.getRecipeIngredients();
-            instructions = recipe.getRecipeInstruction();
-        }
-
-        recipeImage = findViewById(R.id.recipeImage_viewRecipeActivity);
-        recipeTitle = findViewById(R.id.recipeTitleView);
-        publisherTextView = findViewById(R.id.publisherTextView);
-        ingredientsTextView = findViewById(R.id.ingredients_recipeViewActivity);
-        caloriesTextView = findViewById(R.id.calorieTextView);
-        timeTextView = findViewById(R.id.timeTextView);
-        ingredientsListView = findViewById(R.id.ingredientListView);
-        instructionTextView = findViewById(R.id.instructionsTextView);
+        ingredients = recipe.getRecipeIngredients();
+        instructions = recipe.getRecipeInstruction();
 
         Bitmap image = ImageProcessor.convertUriToBitmap(this, recipe.getRecipeImage());
         recipeImage.setImageBitmap(image);
@@ -94,6 +81,17 @@ public class RecipeViewActivity extends AppCompatActivity {
 
     }
 
+    public void initializeView(){
+        recipeImage = findViewById(R.id.recipeImage_viewRecipeActivity);
+        recipeTitle = findViewById(R.id.recipeTitleView);
+        publisherTextView = findViewById(R.id.publisherTextView);
+        ingredientsTextView = findViewById(R.id.ingredients_recipeViewActivity);
+        caloriesTextView = findViewById(R.id.calorieTextView);
+        timeTextView = findViewById(R.id.timeTextView);
+        ingredientsListView = findViewById(R.id.ingredientListView);
+        instructionTextView = findViewById(R.id.instructionsTextView);
+    }
+
     /**
      * Make sure the listView will be set by the correct height based on
      * the number of the items it has.
@@ -119,6 +117,15 @@ public class RecipeViewActivity extends AppCompatActivity {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    /*
+    RECEIVE DATA FROM FRAGMENT
+     */
+    private void receiveData() {
+        //RECEIVE DATA VIA INTENT
+        Intent i = getIntent();
+        recipe = i.getParcelableExtra("recipe");
     }
 
 

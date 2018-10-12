@@ -16,6 +16,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -107,12 +109,7 @@ public class ProfileFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Recipe recipe = fakeRecipeRepository.getFakeRepo().get(position);
-
-                Intent intent = new Intent(getActivity(), RecipeViewActivity.class);
-
-                intent.putExtra("id", recipe.getId());
-
-                startActivity(intent);
+                sendData(recipe);
             }
         });
 
@@ -222,6 +219,13 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+    }
+
+    private void sendData(Recipe recipe)
+    {
+        Intent i = new Intent(getActivity().getBaseContext(), RecipeViewActivity.class);
+        i.putExtra("recipe", recipe);
+        startActivity(i);
     }
 
     private void sendUserDataToDatabase() {

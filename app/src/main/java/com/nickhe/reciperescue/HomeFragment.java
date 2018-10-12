@@ -23,7 +23,7 @@ import android.widget.ListView;
 public class HomeFragment extends Fragment {
 
     private ListView listView;
-    static FakeRecipeRepository fakeRecipeRepository;
+    FakeRecipeRepository fakeRecipeRepository;
 
     public HomeFragment() {
 
@@ -56,11 +56,14 @@ public class HomeFragment extends Fragment {
 
                 Recipe recipe = fakeRecipeRepository.getFakeRepo().get(position);
 
-                Intent intent = new Intent(getActivity(), RecipeViewActivity.class);
-
-                intent.putExtra("id", recipe.getId());
-
-                startActivity(intent);
+                sendData(recipe);
+//                Bundle bundle = new Bundle();
+//                Intent intent = new Intent(getActivity().getBaseContext(), RecipeViewActivity.class);
+//                bundle.putSerializable("recipe", recipe);
+//                intent.putExtras(bundle);
+//                //intent.putExtra("recipe", recipe);
+//
+//                getActivity().startActivity(intent);
             }
         });
     }
@@ -93,5 +96,12 @@ public class HomeFragment extends Fragment {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
+    }
+
+    private void sendData(Recipe recipe)
+    {
+        Intent i = new Intent(getActivity().getBaseContext(), RecipeViewActivity.class);
+        i.putExtra("recipe", recipe);
+        startActivity(i);
     }
 }

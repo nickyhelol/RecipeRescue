@@ -109,7 +109,7 @@ public class RecipeListAdapterFilterable extends RecyclerView.Adapter implements
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), RecipeViewActivity.class);
 
-                intent.putExtra("id", recipe.getId()); //Adds an extra to the intent, the recipe id
+                intent.putExtra("recipe", recipe); //Adds an extra to the intent, the recipe id
 
                 v.getContext().startActivity(intent); //Starts the view recipe activity
             }
