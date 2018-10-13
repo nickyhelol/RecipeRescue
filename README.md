@@ -13,7 +13,8 @@ A recipe sharing application which is designed to encourage people to share thei
 
 ## Features
 
-- Using firebase to administrate the account info
+- Using firebase to administrate the user account info
+- Hosted recipe database on Firebase
 - Well designed layouts to display a nice interface to users
 - Automatically save changes you make in each acticities
 
