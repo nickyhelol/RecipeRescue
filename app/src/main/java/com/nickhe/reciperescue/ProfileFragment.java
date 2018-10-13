@@ -5,8 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaExtractor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,16 +16,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,14 +30,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class ProfileFragment extends Fragment {
 
     private User user;
     private View view;
     private ImageView profileImageView, addNewRecipeIncon;
+    private EditText nameEditView, descriptionEditView;
     private ListView listView;
     private RecipeRepository recipeRepository;
     public final int READ_IMAGE_PERMISSION = 0;
@@ -66,7 +61,7 @@ public class ProfileFragment extends Fragment {
 
         askPermission();
         initialize();
-
+        updateView();
         //Set clickListener to allow users to select image from their phone as the profile image
         profileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +95,7 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     *Ask READ_IMAGE_PERMISSION if does not have permission
+     * Ask READ_IMAGE_PERMISSION if does not have permission
      */
     private void askPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -115,15 +110,30 @@ public class ProfileFragment extends Fragment {
      */
     private void initialize() {
         firebaseAuth = FirebaseAuth.getInstance();
+        user = UserDataManager.getUser();
         profileImageView = view.findViewById(R.id.profileImageView);
         addNewRecipeIncon = view.findViewById(R.id.addNewRecipeIcon);
+        nameEditView = view.findViewById(R.id.nameEditText);
+        descriptionEditView = view.findViewById(R.id.descriptionEditText);
         listView = view.findViewById(R.id.profile_recipeList);
         recipeRepository = RecipeRepository.getRecipeRepository();
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), recipeRepository.getRecipeRepo());
         listView.setAdapter(recipeListAdapter);
         ListViewProcessor.setListViewHeightBasedOnChildren(listView);
-
     }
+
+    private void updateView(){
+        Uri uri = Uri.parse(user.getProfileImage());
+        Bitmap bitmap = ImageProcessor.convertUriToBitmap(getActivity(), uri);
+        String userName = user.getName();
+        String description = user.getDescription();
+
+        profileImageView.setImageBitmap(bitmap);
+        nameEditView.setText(userName);
+        descriptionEditView.setText(description);
+    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -160,15 +170,6 @@ public class ProfileFragment extends Fragment {
                     cursor.close();
                     profileImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                 }
-
-           /* case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                CropImage.ActivityResult result = CropImage.getActivityResult(data);
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri resultUri = result.getUri();
-
-                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    Exception error = result.getError();
-                }*/
         }
     }
 
@@ -180,7 +181,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                System.out.println(user.getName() + " " + user.getEmail() + " " + user.getAge());
             }
 
             @Override

@@ -65,13 +65,12 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 //calling method
                                 verifyEmail();
-                                sendUserDataToDatabase();
                                 //when user registers to the database, it signs in as well in firebase so we need to sign out user
                                 //to prevent from going to other activity than main activity. And the user will be null.
-                                firebaseAuth.signOut();
-                                Toast.makeText(RegisterToFirebaseActivity.this, "Successfully Registered, Upload completed", Toast.LENGTH_LONG).show();
-                                finish();
-                                startActivity(new Intent(RegisterToFirebaseActivity.this, MainLoginActivity.class));
+//                                firebaseAuth.signOut();
+//                                Toast.makeText(RegisterToFirebaseActivity.this, "Successfully Registered, Upload completed", Toast.LENGTH_LONG).show();
+//                                finish();
+//                                startActivity(new Intent(RegisterToFirebaseActivity.this, MainLoginActivity.class));
                             } else {
                                 Toast.makeText(RegisterToFirebaseActivity.this, "Registration failed, User name already exists", Toast.LENGTH_SHORT).show();
                             }
@@ -89,12 +88,6 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
             }
         });
 
-        /**
-         * adding on click listener for the image button so that it can direct user to their gallery to choose pic
-         * so that they can upload it to their profile.
-         */
-
-
     }
 
     /**
@@ -106,8 +99,6 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
         signUpBtn = findViewById(R.id.signUpBtn);
         loginTextView = findViewById(R.id.loginTextView);
         errorTextView = findViewById(R.id.errorTextView_signUp);
-
-
     }
 
     /**
@@ -139,43 +130,23 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
      * Sends the verification email to the user to verify the email.
      */
     private void verifyEmail() {
-        FirebaseUser user = firebaseAuth.getCurrentUser();//gets current user
-
-        if (user != null) {//
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
             user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {//if the task is successfull, show the display message
-                        //calling method
-
-                        // sendUserDataToDatabase();
+                    if (task.isSuccessful()) {
+                        UserDataManager.sendUserDataToDatabase(firebaseAuth);
                         Toast.makeText(RegisterToFirebaseActivity.this, "Successfully Registered, Verification mail sent", Toast.LENGTH_LONG).show();
-                        firebaseAuth.signOut();//once the user has created firebase username and password, user is actually
-                        //signed in into the firebase so we need to sign them out. we don't want user to enter the app without logging
-                        //in into the firebase.
+                        firebaseAuth.signOut();
                         finish();
                         startActivity(new Intent(RegisterToFirebaseActivity.this, MainLoginActivity.class));
                     } else {
-                        Toast.makeText(RegisterToFirebaseActivity.this, "Verification not sent", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterToFirebaseActivity.this, "Sending Verification failed", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
-    }
-
-    /**
-     * This method creates the database reference per user and sends it to the firebase database.
-     */
-    private void sendUserDataToDatabase() {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());//getting the UID of the user from the firebase console.
-
-        //Creating user object
-        User user = new User(userEmail);
-
-        //since the database reference need an object of class, we created the object of user class, and assigned the value
-        //as per the constructor to pass into the database reference.
-        databaseReference.setValue(user);
     }
 
     /**
@@ -189,12 +160,12 @@ public class RegisterToFirebaseActivity extends AppCompatActivity {
 
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         CharSequence inputStr = email;
-
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(inputStr);
         if (matcher.matches()) {
             isValid = true;
         }
+
         return isValid;
     }
 

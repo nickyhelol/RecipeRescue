@@ -90,7 +90,7 @@ public class RecipeDataManager {
                             for(QueryDocumentSnapshot document: task.getResult())
                             {
                                 Map<String, Object> recipeData = document.getData();
-                                Recipe recipe = parseMapToMap(recipeData);
+                                Recipe recipe = parseMapToRecipe(recipeData);
                                 recipeRetrieved.add(recipe);
                                 System.out.println("Recipe added!!!!!!!!!!");
                             }
@@ -107,7 +107,7 @@ public class RecipeDataManager {
      * @param map
      * @return
      */
-    public Recipe parseMapToMap(Map<String, Object> map)
+    public Recipe parseMapToRecipe(Map<String, Object> map)
     {
         String recipeTitle = (String) map.get("recipeTitle");
         ArrayList<String> recipeIngredientsList = (ArrayList<String>) map.get("recipeIngredients");

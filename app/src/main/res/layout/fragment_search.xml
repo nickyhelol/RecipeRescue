@@ -6,9 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -65,8 +62,6 @@
                     app:layout_constraintVertical_bias="1.0" />
 
             </android.support.constraint.ConstraintLayout>
-
-
 
             <ListView
                 android:id="@+id/resultListView"

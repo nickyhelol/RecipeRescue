@@ -1,12 +1,8 @@
 package com.nickhe.reciperescue;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.io.Serializable;
-import java.net.URI;
 
 /**
  * Recipe object to use in the program, should be able to be stored in the database.
