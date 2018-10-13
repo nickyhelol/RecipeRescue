@@ -1,7 +1,8 @@
 package com.nickhe.reciperescue;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
+
+import com.nickhe.reciperescue.Recipe;
 
 import java.util.ArrayList;
 
@@ -12,35 +13,22 @@ import java.util.ArrayList;
  */
 public class User {
 
-    private String age;
-    private String email;
     private String name;
     private String description;
-    private Uri profileImage;
+    private String profileImageUri;
     private ArrayList<Recipe> personalRepo;
-
-    public User(String email) {
-        this.email = email;
-    }
+    private ArrayList<String> shoppingList;
 
     public User(){
-
+        this.profileImageUri = "android.resource://com.nickhe.reciperescue/drawable/"+R.drawable.blankproflie;
     }
 
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public User(String name, String description, String profileImageUri, ArrayList<Recipe> personalRepo, ArrayList<String> shoppingList) {
+        this.name = name;
+        this.description = description;
+        this.profileImageUri = profileImageUri;
+        this.personalRepo = personalRepo;
+        this.shoppingList = shoppingList;
     }
 
     public String getName() {
@@ -59,12 +47,12 @@ public class User {
         this.description = description;
     }
 
-    public Uri getProfileImage() {
-        return profileImage;
+    public String getProfileImage() {
+        return profileImageUri;
     }
 
-    public void setProfileImage(Uri profileImage) {
-        this.profileImage = profileImage;
+    public void setProfileImage(String profileImageUri) {
+        this.profileImageUri = profileImageUri;
     }
 
     public ArrayList<Recipe> getPersonalRepo() {
@@ -73,5 +61,13 @@ public class User {
 
     public void setPersonalRepo(ArrayList<Recipe> personalRepo) {
         this.personalRepo = personalRepo;
+    }
+
+    public ArrayList<String> getShoppingList() {
+        return shoppingList;
+    }
+
+    public void setShoppingList(ArrayList<String> shoppingList) {
+        this.shoppingList = shoppingList;
     }
 }

@@ -1,7 +1,5 @@
 package com.nickhe.reciperescue;
 
-import android.app.Activity;
-
 import java.util.ArrayList;
 import java.util.List;
 

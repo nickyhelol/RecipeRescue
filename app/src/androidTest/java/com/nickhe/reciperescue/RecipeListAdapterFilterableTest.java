@@ -2,9 +2,6 @@ package com.nickhe.reciperescue;
 
 import android.app.Activity;
 import android.os.Looper;
-import android.support.test.InstrumentationRegistry;
-
-import junit.extensions.ActiveTestSuite;
 
 import org.junit.After;
 import org.junit.Before;

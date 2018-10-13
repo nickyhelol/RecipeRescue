@@ -25,15 +25,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-        homeFragment = new HomeFragment();
-        searchFragment = new SearchFragment();
-        profileFragment = new ProfileFragment();
-        rankListFragment = new RankListFragment();
-
+        initialize();
         setFragment(homeFragment);
 
         //Set ActionListener for the BottomNavigationView
@@ -61,6 +53,18 @@ public class MainMenuActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    /**
+     * Initialize views and fragments
+     */
+    private void initialize(){
+        firebaseAuth = FirebaseAuth.getInstance();
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        homeFragment = new HomeFragment();
+        searchFragment = new SearchFragment();
+        profileFragment = new ProfileFragment();
+        rankListFragment = new RankListFragment();
     }
 
     /**

@@ -1,13 +1,10 @@
 package com.nickhe.reciperescue;
 
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +16,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,15 +27,14 @@ import java.util.regex.Pattern;
 
 /**
  * This activity is the main login activity where user can provide email and password to login into the application
- *
  */
 public class MainLoginActivity extends AppCompatActivity {
 
-    public static User user;
     private EditText emailEditText, passwordEditText;
     private Button signInBtn;
     private TextView signUpTextView, forgotPasswordTextView, errorTextView;
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
     private ProgressDialog progressDialog;
 
     @Override
@@ -51,17 +46,10 @@ public class MainLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_login);
         initializeViews();
 
-        firebaseAuth=FirebaseAuth.getInstance();
-        progressDialog= new ProgressDialog(this);
+        firebaseAuth = FirebaseAuth.getInstance();
+        progressDialog = new ProgressDialog(this);
 
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
-        if(firebaseUser!=null){
-            getUser();
-            finish();//meaning if there is no user then it will stay at the main activity and have to enter sign in details again.
-            startActivity(new Intent(MainLoginActivity.this,MainMenuActivity.class));
-        }
-
+        checkCurrentUser();
 
         //providing onclick function for login button
         signInBtn.setOnClickListener(new View.OnClickListener() {
@@ -69,9 +57,7 @@ public class MainLoginActivity extends AppCompatActivity {
             @Override
 
             public void onClick(View view) {
-
                 validate(emailEditText.getText().toString(), passwordEditText.getText().toString());
-
             }
 
         });
@@ -96,39 +82,47 @@ public class MainLoginActivity extends AppCompatActivity {
      * This method will initialize all the variables and upon its call,
      * it will show all the views to the screen
      */
-    private void initializeViews(){
+    private void initializeViews() {
         emailEditText = findViewById(R.id.emailEditText_signIn);
         passwordEditText = findViewById(R.id.passwordEditText_singIn);
         signInBtn = findViewById(R.id.signInBtn);
         signUpTextView = findViewById(R.id.signUpTextView);
-        forgotPasswordTextView= findViewById(R.id.forgotPasswordTextView);
-        errorTextView= findViewById(R.id.errorTextView_signIn);
+        forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView);
+        errorTextView = findViewById(R.id.errorTextView_signIn);
     }
 
+    /**
+     * Check if there is a user who already signed in
+     */
+    private void checkCurrentUser()
+    {
+        firebaseUser = firebaseAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            UserDataManager.retrieveUser(firebaseAuth);
+            finish();
+            startActivity(new Intent(MainLoginActivity.this, MainMenuActivity.class));
+        }
+    }
 
     /**
      * This method will validate if the given name and the password are valid and if they are valid then it will let
      * user to enter to new window otherwise it will send error message
+     *
      * @param userEmail
      * @param userPassword
      */
 
     private void validate(String userEmail, String userPassword) {
 
-        if(userEmail.isEmpty()){
+        if (userEmail.isEmpty()) {
             errorTextView.setText("Email address required!");
-        }
-
-       else if (!isEmailValid(userEmail)){
+        } else if (!isEmailValid(userEmail)) {
             errorTextView.setText("Please enter valid email address!");
-        }
-        else if(userPassword.isEmpty()){
+        } else if (userPassword.isEmpty()) {
             errorTextView.setText("Password required!");
-        }
-        else if(!isPasswordValid(userPassword)){
+        } else if (!isPasswordValid(userPassword)) {
             errorTextView.setText("Password must be at least 6 character");
-        }
-        else {
+        } else {
             errorTextView.setText("");
             progressDialog.setMessage("Logging in");
             progressDialog.show();
@@ -154,24 +148,23 @@ public class MainLoginActivity extends AppCompatActivity {
      * is correct then it will let user enter to new window otherwise it will sign out from the firebase
      * and ask user to provide correct email address.
      */
-    private void checkEmailVerification(){
-        FirebaseUser firebaseUser= firebaseAuth.getInstance().getCurrentUser();
-        Boolean flag= firebaseUser.isEmailVerified();
+    private void checkEmailVerification() {
+        firebaseUser = firebaseAuth.getCurrentUser();
+        Boolean flag = firebaseUser.isEmailVerified();
 
-        //if email is verified then link this to the second activity
-        if(flag){
-            getUser();
-            finish();//finishes this main activity and directs it to the second activity.
+        if (flag) {
+            UserDataManager.retrieveUser(firebaseAuth);
+            finish();
             startActivity(new Intent(MainLoginActivity.this, MainMenuActivity.class));
-        }else{//if the email is not verified then send a toast message to user and sign out from the firebase
+        } else {
             Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show();
-            //Need to sign out until user provides the valid email address.
             firebaseAuth.signOut();
         }
     }
 
     /**
      * This method check if the given email address is valid or not.
+     *
      * @param email email address
      * @return true if the email is valid and false otherwise
      */
@@ -191,32 +184,13 @@ public class MainLoginActivity extends AppCompatActivity {
 
     /**
      * This method checks if the given password is valid or not.
+     *
      * @param password password
      * @return true if the password is valid and false otherwise
      */
-    public static boolean isPasswordValid(String password){
+    public static boolean isPasswordValid(String password) {
         return password.length() >= 6;
     }
 
-    /**
-     * Retrieve the user from the database
-     */
-    public void getUser()
-    {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference(firebaseAuth.getUid());
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 }
