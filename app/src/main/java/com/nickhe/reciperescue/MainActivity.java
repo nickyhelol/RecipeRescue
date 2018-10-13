@@ -15,6 +15,7 @@ import android.view.View;
  */
 public class MainActivity extends AppCompatActivity {
 
+    RecipeRepository recipeRepository;
     /**
      * The login method starts the MainLoginActivity activity and switches to it.
      *
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        recipeRepository = RecipeRepository.getRecipeRepository();
     }
 
 }

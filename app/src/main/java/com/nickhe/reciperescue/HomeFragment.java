@@ -15,15 +15,14 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HomeFragment extends Fragment {
 
+    private View view;
     private ListView listView;
-    FakeRecipeRepository fakeRecipeRepository;
+    RecipeRepository recipeRepository;
 
     public HomeFragment() {
 
@@ -32,10 +31,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        view = inflater.inflate(R.layout.fragment_home, container, false);
 
         return view;
     }
@@ -44,61 +40,36 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        listView = view.findViewById(R.id.home_recipeList);
-        fakeRecipeRepository = FakeRecipeRepository.getFakeRecipeRepository(getActivity());
-        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), fakeRecipeRepository.getFakeRepo());
-        listView.setAdapter(recipeListAdapter);
-        setListViewHeightBasedOnChildren(listView);
+        initialize();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Recipe recipe = fakeRecipeRepository.getFakeRepo().get(position);
+                Recipe recipe = recipeRepository.getRecipeRepo().get(position);
 
-                sendData(recipe);
-//                Bundle bundle = new Bundle();
-//                Intent intent = new Intent(getActivity().getBaseContext(), RecipeViewActivity.class);
-//                bundle.putSerializable("recipe", recipe);
-//                intent.putExtras(bundle);
-//                //intent.putExtra("recipe", recipe);
-//
-//                getActivity().startActivity(intent);
+                startRecipeViewActivity(recipe);
             }
         });
-    }
 
-    public ListView getListView() {
-        return listView;
     }
 
     /**
-     * Make sure the listView will be set by the correct height based on
-     * the number of the items it has.
-     * @param listView
+     * Initialize views and other fields
      */
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
+    private void initialize(){
+        listView = view.findViewById(R.id.home_recipeList);
+        recipeRepository = RecipeRepository.getRecipeRepository();
+        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), recipeRepository.getRecipeRepo());
+        listView.setAdapter(recipeListAdapter);
+        ListViewProcessor.setListViewHeightBasedOnChildren(listView);
     }
 
-    private void sendData(Recipe recipe)
+    /**
+     *
+     * @param recipe
+     */
+    private void startRecipeViewActivity(Recipe recipe)
     {
         Intent i = new Intent(getActivity().getBaseContext(), RecipeViewActivity.class);
         i.putExtra("recipe", recipe);
