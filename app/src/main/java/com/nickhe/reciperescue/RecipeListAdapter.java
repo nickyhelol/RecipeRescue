@@ -25,10 +25,6 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe>
     private List<Recipe> recipes;
     private Activity context;
 
-    public List<Recipe> getRecipes() {
-        return recipes;
-    }
-
     public RecipeListAdapter(Activity context, List<Recipe> recipes) {
         super(context, R.layout.recipe_row, R.id.recipeTextView, recipes);
         this.recipes = recipes;

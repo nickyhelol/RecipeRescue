@@ -22,13 +22,18 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
                 app:cardBackgroundColor="@android:color/white">
 
                 <SearchView
                     android:id="@+id/recipeSearchView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="4dp"
                     android:fadingEdge="horizontal|vertical"
                     android:iconifiedByDefault="false"
                     android:queryBackground="@android:color/transparent"

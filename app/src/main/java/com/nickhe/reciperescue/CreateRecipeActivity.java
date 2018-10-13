@@ -10,10 +10,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
@@ -36,7 +40,20 @@ public class CreateRecipeActivity extends AppCompatActivity {
 
         //TODO IMAGE
 
-        recipeDB.collection("recipes")
+        recipeDB.collection("Recipes")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful())
+                        {
+                            for(QueryDocumentSnapshot document: task.getResult()){
+                                document.getData();
+                            }
+                        }
+                    }
+                });
+        recipeDB.collection("Recipes")
                 .add(recipeSubmit)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

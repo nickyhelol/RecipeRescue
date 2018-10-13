@@ -65,6 +65,18 @@ public class Recipe implements Parcelable {
         this.time = time;
         this.calories = calories;
         this.recipeInstruction = recipeInstruction;
+        this.recipeRating = Rating.THREE;
+        this.recipeImageUri = recipeImageUri;
+    }
+
+    public Recipe(String recipeTitle, String[] recipeIngredients, String recipePublisher, String time, String calories, String[] recipeInstruction, Rating recipeRating, Uri recipeImageUri) {
+        this.recipeTitle = recipeTitle;
+        this.recipeIngredients = recipeIngredients;
+        this.recipePublisher = recipePublisher;
+        this.time = time;
+        this.calories = calories;
+        this.recipeInstruction = recipeInstruction;
+        this.recipeRating = recipeRating;
         this.recipeImageUri = recipeImageUri;
     }
 
@@ -75,6 +87,7 @@ public class Recipe implements Parcelable {
         time = in.readString();
         calories = in.readString();
         recipeInstruction = in.createStringArray();
+        recipeRating = Rating.valueOf(in.readString());
         recipeImageUri = in.readParcelable(Uri.class.getClassLoader());
     }
 
@@ -104,6 +117,7 @@ public class Recipe implements Parcelable {
         dest.writeString(time);
         dest.writeString(calories);
         dest.writeStringArray(recipeInstruction);
+        dest.writeString(recipeRating.name());
         dest.writeParcelable(recipeImageUri, flags);
     }
 

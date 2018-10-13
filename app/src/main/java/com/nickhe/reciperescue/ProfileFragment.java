@@ -39,35 +39,23 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 public class ProfileFragment extends Fragment {
 
-    User user;
-    ImageView profileImageView;
-    ListView listView;
-    FakeRecipeRepository fakeRecipeRepository;
+    private User user;
+    private View view;
+    private ImageView profileImageView, addNewRecipeIncon;
+    private ListView listView;
+    private RecipeRepository recipeRepository;
     public final int READ_IMAGE_PERMISSION = 0;
     public final int PICK_IMAGE_RESULT = 1;
-
-    //
     private FirebaseAuth firebaseAuth;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    public void loadUserInfo()
-    {
-
-    }
-
-    public void initializeView(User user)
-    {
-
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         return view;
     }
@@ -76,20 +64,8 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_IMAGE_PERMISSION);
-        }
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        profileImageView = view.findViewById(R.id.profileImageView);
-        listView = view.findViewById(R.id.profile_recipeList);
-        fakeRecipeRepository = FakeRecipeRepository.getFakeRecipeRepository(getActivity());
-        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), fakeRecipeRepository.getFakeRepo());
-        listView.setAdapter(recipeListAdapter);
-        setListViewHeightBasedOnChildren(listView);
+        askPermission();
+        initialize();
 
         //Set clickListener to allow users to select image from their phone as the profile image
         profileImageView.setOnClickListener(new View.OnClickListener() {
@@ -99,7 +75,7 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                startActivityForResult(intent , 1);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -108,33 +84,55 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Recipe recipe = fakeRecipeRepository.getFakeRepo().get(position);
+                Recipe recipe = recipeRepository.getRecipeRepo().get(position);
                 sendData(recipe);
             }
         });
 
-         TextView newRecipeButton = view.findViewById(R.id.newRecipeButton);
-         newRecipeButton.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 startActivity(new Intent(getActivity(), CreateRecipeActivity.class));
-             }
-         });
+        //To all users to be able to submit a new recipe
+        addNewRecipeIncon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), CreateRecipeActivity.class));
+            }
+        });
 
-         //sendUserDataToDatabase();
-        getUser();
+    }
+
+    /**
+     *Ask READ_IMAGE_PERMISSION if does not have permission
+     */
+    private void askPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_IMAGE_PERMISSION);
+        }
+    }
+
+    /**
+     * Initialize views and other fields
+     */
+    private void initialize() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        profileImageView = view.findViewById(R.id.profileImageView);
+        addNewRecipeIncon = view.findViewById(R.id.addNewRecipeIcon);
+        listView = view.findViewById(R.id.profile_recipeList);
+        recipeRepository = RecipeRepository.getRecipeRepository();
+        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), recipeRepository.getRecipeRepo());
+        listView.setAdapter(recipeListAdapter);
+        ListViewProcessor.setListViewHeightBasedOnChildren(listView);
+
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case READ_IMAGE_PERMISSION:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getActivity(), "Permission granted!", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(getActivity(), "Permission denied!", Toast.LENGTH_SHORT).show();
                 }
         }
@@ -143,11 +141,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case PICK_IMAGE_RESULT:
-                if(resultCode == Activity.RESULT_OK)
-                {
+                if (resultCode == Activity.RESULT_OK) {
                     Uri selectedImg = data.getData();
 
                     /*CropImage.activity()
@@ -176,34 +172,7 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-    /**
-     * Make sure the listView will be set by the correct height based on
-     * the number of the items it has.
-     * @param listView
-     */
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-    }
-
-    public void getUser()
-    {
+    public void getUser() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance()
                 .getReference(firebaseAuth.getUid());
 
@@ -211,7 +180,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                System.out.println(user.getName()+" "+user.getEmail()+" "+user.getAge());
+                System.out.println(user.getName() + " " + user.getEmail() + " " + user.getAge());
             }
 
             @Override
@@ -221,8 +190,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void sendData(Recipe recipe)
-    {
+    private void sendData(Recipe recipe) {
         Intent i = new Intent(getActivity().getBaseContext(), RecipeViewActivity.class);
         i.putExtra("recipe", recipe);
         startActivity(i);
@@ -232,11 +200,6 @@ public class ProfileFragment extends Fragment {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());//getting the UID of the user from the firebase console.
 
-        //Creating user object
-        //User user = new User("Nick He", "30", "asdjkjl@mgalsjdkl", "description");
-
-        //since the database reference need an object of class, we created the object of user class, and assigned the value
-        //as per the constructor to pass into the database reference.
         databaseReference.setValue(user);
     }
 }
