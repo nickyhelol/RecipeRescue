@@ -40,42 +40,57 @@ public class MainLoginActivity extends AppCompatActivity {
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main_login);
         initializeViews();
+        setSignInBtnOnClickListener();
+        setSignUpTextViewOnClickListener();
+        setForgotPasswordTextViewOnClickListener();
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
 
         checkCurrentUser();
 
-        //providing onclick function for login button
-        signInBtn.setOnClickListener(new View.OnClickListener() {
+    }
 
-            @Override
-
-            public void onClick(View view) {
-                validate(emailEditText.getText().toString(), passwordEditText.getText().toString());
-            }
-
-        });
-        signUpTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainLoginActivity.this, RegisterToFirebaseActivity.class));
-            }
-        });
-
-        //providing onclick function for forgot password text view
+    /**
+     * Set onclick function for forgot password text view
+     */
+    private void setForgotPasswordTextViewOnClickListener(){
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainLoginActivity.this, ForgotPasswordActivity.class));
             }
         });
+    }
 
+    /**
+     * Set onclick listener for signUpTextView
+     */
+    private void setSignUpTextViewOnClickListener()
+    {
+        signUpTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainLoginActivity.this, RegisterToFirebaseActivity.class));
+            }
+        });
+    }
+
+    /**
+     * Providing onclick function for login button
+     */
+    private void setSignInBtnOnClickListener(){
+        signInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                validate(emailEditText.getText().toString(), passwordEditText.getText().toString());
+            }
+
+        });
     }
 
     /**
@@ -98,6 +113,7 @@ public class MainLoginActivity extends AppCompatActivity {
     {
         firebaseUser = firebaseAuth.getCurrentUser();
         if (firebaseUser != null) {
+            //UserDataManager.sendUserDataToDatabase(firebaseAuth);
             UserDataManager.retrieveUser(firebaseAuth);
             finish();
             startActivity(new Intent(MainLoginActivity.this, MainMenuActivity.class));
@@ -138,7 +154,6 @@ public class MainLoginActivity extends AppCompatActivity {
                         Toast.makeText(MainLoginActivity.this, "Wrong user name or password", Toast.LENGTH_SHORT).show();
                     }
                 }
-
             });
         }
     }
@@ -153,6 +168,7 @@ public class MainLoginActivity extends AppCompatActivity {
         Boolean flag = firebaseUser.isEmailVerified();
 
         if (flag) {
+            //UserDataManager.sendUserDataToDatabase(firebaseAuth);
             UserDataManager.retrieveUser(firebaseAuth);
             finish();
             startActivity(new Intent(MainLoginActivity.this, MainMenuActivity.class));

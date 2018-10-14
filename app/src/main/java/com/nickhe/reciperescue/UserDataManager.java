@@ -43,6 +43,18 @@ public class UserDataManager {
         });
     }
 
+    /**
+     * Update user Info when the data of the user changed
+     *
+     * @param firebaseAuth
+     */
+    public static void updateUserToFirebase(FirebaseAuth firebaseAuth){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
+        databaseReference.setValue(user);
+    }
+
+
     public static User getUser() {
         return user;
     }

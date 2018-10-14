@@ -15,6 +15,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class ProfileFragment extends Fragment {
+import java.io.ByteArrayOutputStream;
+import java.nio.channels.spi.AbstractSelectionKey;
+
+public class ProfileFragment extends Fragment implements TextWatcher {
 
     private User user;
     private View view;
@@ -40,11 +45,13 @@ public class ProfileFragment extends Fragment {
     private ListView listView;
     private RecipeRepository recipeRepository;
     public final int READ_IMAGE_PERMISSION = 0;
+    public final int WRITE_IMAGE_PERMISSION = 2;
     public final int PICK_IMAGE_RESULT = 1;
     private FirebaseAuth firebaseAuth;
+    private TextWatcher textWatcher;
 
     public ProfileFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -59,49 +66,123 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        askPermission();
+        askReadExternalStoragePermission();
         initialize();
         updateView();
-        //Set clickListener to allow users to select image from their phone as the profile image
-        profileImageView.setOnClickListener(new View.OnClickListener() {
+
+        setProfileImageViewListener();
+        setListViewClickListener();
+        setAddNewRecipeInconClickListener();
+        nameEditView.addTextChangedListener(this);
+        descriptionEditView.addTextChangedListener(this);
+
+    }
+
+    /**
+     * Set nameEditText textChanged listener
+     */
+    private void setNameEditViewOnClickListener() {
+        nameEditView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            }
 
-                startActivityForResult(intent, 1);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //updateUserName(s.toString());
             }
         });
+    }
 
-        //To allow users to be able to open a recipe and review that
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    /**
+     * Set descriptionEditText textChanged listener
+     */
+    private void setDescriptionEditViewOnClickListener() {
+        descriptionEditView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                Recipe recipe = recipeRepository.getRecipeRepo().get(position);
-                sendData(recipe);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //updateUserDescription(s.toString());
             }
         });
+    }
 
-        //To all users to be able to submit a new recipe
+
+    /**
+     * To all users to be able to submit a new recipe
+     */
+    private void setAddNewRecipeInconClickListener() {
         addNewRecipeIncon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), CreateRecipeActivity.class));
             }
         });
+    }
 
+    /**
+     * To allow users to be able to open a recipe and review that
+     */
+    private void setListViewClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Recipe recipe = recipeRepository.getRecipeRepo().get(position);
+                sendDataToRecipeViewActivity(recipe);
+            }
+        });
+    }
+
+    /**
+     * Set clickListener to allow users to select image from their phone as the profile image
+     */
+    private void setProfileImageViewListener() {
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                askWriteExternalStoragePermission();
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     /**
      * Ask READ_IMAGE_PERMISSION if does not have permission
      */
-    private void askPermission() {
+    private void askReadExternalStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_IMAGE_PERMISSION);
+        }
+    }
+
+    private void askWriteExternalStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_IMAGE_PERMISSION);
+            }
         }
     }
 
@@ -122,7 +203,10 @@ public class ProfileFragment extends Fragment {
         ListViewProcessor.setListViewHeightBasedOnChildren(listView);
     }
 
-    private void updateView(){
+    /**
+     * Update view when userInfo retrieved
+     */
+    private void updateView() {
         Uri uri = Uri.parse(user.getProfileImage());
         Bitmap bitmap = ImageProcessor.convertUriToBitmap(getActivity(), uri);
         String userName = user.getName();
@@ -133,8 +217,13 @@ public class ProfileFragment extends Fragment {
         descriptionEditView.setText(description);
     }
 
-
-
+    /**
+     * The result action after requesting permissions
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -145,9 +234,24 @@ public class ProfileFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "Permission denied!", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case WRITE_IMAGE_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getActivity(), "Permission granted!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Permission denied!", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
+    /**
+     * The activity when selected an image from gallery
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -155,12 +259,6 @@ public class ProfileFragment extends Fragment {
             case PICK_IMAGE_RESULT:
                 if (resultCode == Activity.RESULT_OK) {
                     Uri selectedImg = data.getData();
-
-                    /*CropImage.activity()
-                            .setGuidelines(CropImageView.Guidelines.ON)
-                            .setAspectRatio(1,1)
-                            .start(getActivity());*/
-
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
                     Cursor cursor = getActivity().getContentResolver()
                             .query(selectedImg, filePathColumn, null, null, null);
@@ -168,38 +266,88 @@ public class ProfileFragment extends Fragment {
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     String picturePath = cursor.getString(columnIndex);
                     cursor.close();
-                    profileImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                    Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+                    System.out.println("Bitmap: " + bitmap);
+                    getImageUri(bitmap);
+                    profileImageView.setImageBitmap(bitmap);
                 }
         }
     }
 
-    public void getUser() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-                .getReference(firebaseAuth.getUid());
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    /**
+     * Get the path string of the selected image
+     *
+     * @param inImage
+     * @return
+     */
+    private void getImageUri(Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), inImage, "Title", null);
+        System.out.println("Path: " + path);
+        updateUserImage(path);
     }
 
-    private void sendData(Recipe recipe) {
+    /**
+     * Update userImage data on firebase
+     *
+     * @param path
+     */
+    private void updateUserImage(String path) {
+        user.setProfileImage(path);
+        UserDataManager.setUser(user);
+        UserDataManager.updateUserToFirebase(firebaseAuth);
+
+    }
+
+    /**
+     * Update user name to firebase
+     */
+    private void updateUserName(String name) {
+        user.setName(name);
+        UserDataManager.setUser(user);
+        UserDataManager.updateUserToFirebase(firebaseAuth);
+    }
+
+    /**
+     * Update user description to firebase
+     */
+    private void updateUserDescription(String description) {
+        user.setDescription(description);
+        UserDataManager.setUser(user);
+        UserDataManager.updateUserToFirebase(firebaseAuth);
+    }
+
+    /**
+     * Start RecipeViewActivity when recipe clicked
+     *
+     * @param recipe
+     */
+    private void sendDataToRecipeViewActivity(Recipe recipe) {
         Intent i = new Intent(getActivity().getBaseContext(), RecipeViewActivity.class);
         i.putExtra("recipe", recipe);
         startActivity(i);
     }
 
-    private void sendUserDataToDatabase() {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());//getting the UID of the user from the firebase console.
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        databaseReference.setValue(user);
     }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (s != null && s.hashCode() != "".hashCode()) {
+            if (s.hashCode() == nameEditView.getEditableText().hashCode()) {
+                updateUserName(s.toString());
+            } else if (s.hashCode() == descriptionEditView.getEditableText().hashCode()) {
+                updateUserDescription(s.toString());
+            }
+        }
+    }
+
 }
