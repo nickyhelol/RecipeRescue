@@ -27,8 +27,14 @@ public class MainMenuActivity extends AppCompatActivity {
 
         initialize();
         setFragment(homeFragment);
+        setBottomNavigationViewListener();
+    }
 
-        //Set ActionListener for the BottomNavigationView
+    /**
+     * Set ActionListener for the BottomNavigationView
+     */
+    private void setBottomNavigationViewListener()
+    {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

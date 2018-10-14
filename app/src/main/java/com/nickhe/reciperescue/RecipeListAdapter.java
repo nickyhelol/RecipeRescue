@@ -43,7 +43,6 @@ public class RecipeListAdapter extends ArrayAdapter<Recipe>
 
         Bitmap recipeImage = ImageProcessor.convertUriToBitmap(this.context, recipes.get(position).getRecipeImage());
         viewHolder.imageView.setImageBitmap(recipeImage);
-        System.out.println("Set imageBitmap success!");
         viewHolder.textView.setText(recipes.get(position).getRecipeTitle());
 
         return row;
