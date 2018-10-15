@@ -16,14 +16,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 public class RecipeViewActivity extends AppCompatActivity {
 
     Recipe recipe;
     ImageView recipeImage, shoppingCartImageView, starImageView, greenStarImageView;
-    TextView recipeTitle, numberOfOrderTextView, publisherTextView, ingredientsTextView;
+    TextView recipeTitle, publisherTextView, ingredientsTextView;
     TextView caloriesTextView, timeTextView, instructionTextView;
     ListView ingredientsListView;
+    static TextView numberOfOrderTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,22 +38,8 @@ public class RecipeViewActivity extends AppCompatActivity {
         updateView();
         initializeIngredientListView();
         initializeInstructionTextView();
-        setIngredientsListViewOnClickListener();
         setStarImageViewOnClickListenner();
         setYellowStarImageViewOnClickListenner();
-    }
-
-    private void setIngredientsListViewOnClickListener(){
-        ingredientsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (view.getId()){
-                    case R.id.addIngredientIcon:
-                    Toast.makeText(RecipeViewActivity.this, "Add clicked", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-            }
-        });
     }
 
     /**
@@ -65,6 +54,7 @@ public class RecipeViewActivity extends AppCompatActivity {
         ingredientsTextView.setText(String.valueOf(recipe.getRecipeIngredients().length));
         caloriesTextView.setText(recipe.getCalories());
         timeTextView.setText(recipe.getTime());
+        numberOfOrderTextView.setText(String.valueOf(UserDataManager.getUser().getShoppingList().size()));
     }
 
     /**
@@ -83,6 +73,10 @@ public class RecipeViewActivity extends AppCompatActivity {
         starImageView = findViewById(R.id.starImageView);
         greenStarImageView = findViewById(R.id.greenStarImageView);
         numberOfOrderTextView = findViewById(R.id.numberOfOrdersTextView);
+    }
+
+    public static void updateNumOfOrderTextView(ArrayList<String> list){
+        numberOfOrderTextView.setText(String.valueOf(list.size()));
     }
 
     /**
@@ -115,23 +109,8 @@ public class RecipeViewActivity extends AppCompatActivity {
 
     private void initializeIngredientListView(){
 
-//        final ArrayAdapter<String> ingredientsArrayAdapter = new ArrayAdapter<String>
-//                (this, android.R.layout.simple_list_item_1, ingredients) {
-//            @Override
-//            public View getView(int position, View convertView, ViewGroup parent) {
-//                // Get the current item from ListView
-//                View view = super.getView(position, convertView, parent);
-//                if (position % 2 == 1) {
-//                    // Set a background color for ListView regular row/item
-//                    view.setBackgroundColor(Color.parseColor("#d9e0de"));
-//                }
-//
-//                return view;
-//            }
-//        };
-
         IngredientListAdapter ingredientListAdapter =
-                new IngredientListAdapter(RecipeViewActivity.this, recipe.getRecipeIngredients());
+                new IngredientListAdapter(RecipeViewActivity.this, recipe.getRecipeIngredients(), recipe);
         ingredientsListView.setAdapter(ingredientListAdapter);
         ListViewProcessor.setListViewHeightBasedOnChildren(ingredientsListView);
     }

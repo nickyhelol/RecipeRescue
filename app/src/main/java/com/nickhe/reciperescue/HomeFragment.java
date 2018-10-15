@@ -41,7 +41,10 @@ public class HomeFragment extends Fragment {
         setListViewOnClickListener();
 //        fakeRecipeRepository = FakeRecipeRepository.getFakeRecipeRepository(getActivity());
 //        recipeDataManager = new RecipeDataManager();
-//        recipeDataManager.saveRecipeToMap(fakeRecipeRepository.getFakeRepo().get(0));
+//        for(Recipe recipe: fakeRecipeRepository.getFakeRepo()){
+//            recipeDataManager.saveRecipeToMap(recipe);
+//        }
+
     }
 
     private void setListViewOnClickListener()

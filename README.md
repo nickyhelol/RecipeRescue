@@ -6,10 +6,11 @@ A recipe sharing application which is designed to encourage people to share thei
  <img src="images/signup.png" width="300">
  <img src="images/signin.png" width="300">
  <img src="images/img3.png" width="300">
- <img src="images/img4.png" width="300">
+ <img src="images/viewrecipe.png" width="300">
  <img src="images/search.png" width="300">
  <img src="images/img6.png" width="300">
  <img src="images/img7.png" width="300">
+ <img src="images/shoppinglist.png" width="300">
 
 ## Features
 

@@ -1,5 +1,6 @@
 package com.nickhe.reciperescue;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,8 +55,8 @@ public class UserDataManager {
         databaseReference.setValue(user);
     }
 
-
     public static User getUser() {
+
         return user;
     }
 

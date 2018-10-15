@@ -15,9 +15,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private HomeFragment homeFragment;
-    private SearchFragment searchFragment;
-    private ProfileFragment profileFragment;
-    private ShoppingListFragment shoppingListFragment;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -40,19 +37,19 @@ public class MainMenuActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home_navigation: {
-                        setFragment(homeFragment);
+                        setFragment(new HomeFragment());
                         return true;
                     }
                     case R.id.search_navigation: {
-                        setFragment(searchFragment);
+                        setFragment(new SearchFragment());
                         return true;
                     }
                     case R.id.profile_navigation: {
-                        setFragment(profileFragment);
+                        setFragment(new ProfileFragment());
                         return true;
                     }
                     case R.id.shoppingList_navigation: {
-                        setFragment(shoppingListFragment);
+                        setFragment(new ShoppingListFragment());
                         return true;
                     }
                 }
@@ -68,9 +65,6 @@ public class MainMenuActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         homeFragment = new HomeFragment();
-        searchFragment = new SearchFragment();
-        profileFragment = new ProfileFragment();
-        shoppingListFragment = new ShoppingListFragment();
     }
 
     /**
