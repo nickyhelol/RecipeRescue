@@ -68,6 +68,7 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 if (searchRecipeName(query)) {
                     updateView();
+                    recipeSearchView.clearFocus();
                     return true;
                 } else {
                     return false;
