@@ -116,7 +116,7 @@ public class RecipeDataManager {
         String time = (String) map.get("time");
         String calories = (String) map.get("calories");
         ArrayList<String> recipeInstructionsList = (ArrayList<String>) map.get("recipeInstructions");
-        String[] recipeInstructions = recipeIngredientsList.toArray(new String[recipeInstructionsList.size()]);
+        String[] recipeInstructions = recipeInstructionsList.toArray(new String[recipeInstructionsList.size()]);
         Rating recipeRating = Rating.valueOf(map.get("recipeRating").toString());
         Uri recipeImageUri = Uri.parse(map.get("recipeImageUri").toString());
 
