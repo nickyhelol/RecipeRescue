@@ -56,12 +56,19 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         initialize();
+        setRecipeSearchViewOnQueryTextListener();
+    }
 
+    /**
+     * Set OnQueryTextListener for recipeSearchView
+     */
+    private void setRecipeSearchViewOnQueryTextListener(){
         recipeSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (searchRecipeName(query)) {
                     updateView();
+                    recipeSearchView.clearFocus();
                     return true;
                 } else {
                     return false;
@@ -109,7 +116,6 @@ public class SearchFragment extends Fragment {
                 numberOfResults++;
             }
         }
-
         return true;
     }
 

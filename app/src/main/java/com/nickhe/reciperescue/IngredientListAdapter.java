@@ -13,17 +13,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class IngredientListAdapter extends ArrayAdapter<String> {
 
     private String[] ingredients;
     private Activity context;
-    private User user;
 
-    public IngredientListAdapter(Activity context, String[] ingredients) {
+    public IngredientListAdapter(Activity context, String[] ingredients, Recipe recipe) {
         super(context, R.layout.ingredient_row, R.id.ingredientTextView_row, ingredients);
         this.ingredients = ingredients;
         this.context = context;
-        this.user = UserDataManager.getUser();
     }
 
     @NonNull
@@ -52,11 +52,13 @@ public class IngredientListAdapter extends ArrayAdapter<String> {
         viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(user.getShoppingList() == null)
+                if(UserDataManager.getUser().getShoppingList() == null)
                 {
                     Toast.makeText(context, "null object", Toast.LENGTH_SHORT).show();
                 }else {
-                    user.getShoppingList().add(ingredients[position]);
+                    UserDataManager.getUser().getShoppingList().add(ingredients[position]);
+                    UserDataManager.updateUserToFirebase(FirebaseAuth.getInstance());
+                    RecipeViewActivity.updateNumOfOrderTextView(UserDataManager.getUser().getShoppingList());
                     Toast.makeText(context, "Ingredient added successfully", Toast.LENGTH_SHORT).show();
                 }
             }
