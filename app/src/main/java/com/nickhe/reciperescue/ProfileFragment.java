@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,7 +70,6 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         askReadExternalStoragePermission();
         initialize();
         updateView();
-
         setProfileImageViewListener();
         setListViewClickListener();
         setAddNewRecipeInconClickListener();
@@ -77,51 +77,6 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         descriptionEditView.addTextChangedListener(this);
 
     }
-
-    /**
-     * Set nameEditText textChanged listener
-     */
-    private void setNameEditViewOnClickListener() {
-        nameEditView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //updateUserName(s.toString());
-            }
-        });
-    }
-
-    /**
-     * Set descriptionEditText textChanged listener
-     */
-    private void setDescriptionEditViewOnClickListener() {
-        descriptionEditView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //updateUserDescription(s.toString());
-            }
-        });
-    }
-
 
     /**
      * To all users to be able to submit a new recipe

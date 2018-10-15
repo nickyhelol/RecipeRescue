@@ -17,7 +17,7 @@ public class MainMenuActivity extends AppCompatActivity {
     private HomeFragment homeFragment;
     private SearchFragment searchFragment;
     private ProfileFragment profileFragment;
-    private RankListFragment rankListFragment;
+    private ShoppingListFragment shoppingListFragment;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -51,8 +51,8 @@ public class MainMenuActivity extends AppCompatActivity {
                         setFragment(profileFragment);
                         return true;
                     }
-                    case R.id.rankList_navigation: {
-                        setFragment(rankListFragment);
+                    case R.id.shoppingList_navigation: {
+                        setFragment(shoppingListFragment);
                         return true;
                     }
                 }
@@ -70,7 +70,7 @@ public class MainMenuActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         searchFragment = new SearchFragment();
         profileFragment = new ProfileFragment();
-        rankListFragment = new RankListFragment();
+        shoppingListFragment = new ShoppingListFragment();
     }
 
     /**

@@ -21,8 +21,8 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/rankList_navigation"
+        android:id="@+id/shoppingList_navigation"
         android:icon="@drawable/ic_format_list_bulleted_black_24dp"
-        android:title="Rank List"
+        android:title="Shopping Cart"
         app:showAsAction="always"/>
 </menu>

@@ -18,6 +18,8 @@ public class HomeFragment extends Fragment {
     private View view;
     private ListView listView;
     RecipeRepository recipeRepository;
+    FakeRecipeRepository fakeRecipeRepository;
+    RecipeDataManager recipeDataManager;
 
     public HomeFragment() {
 
@@ -36,7 +38,14 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         initialize();
+        setListViewOnClickListener();
+//        fakeRecipeRepository = FakeRecipeRepository.getFakeRecipeRepository(getActivity());
+//        recipeDataManager = new RecipeDataManager();
+//        recipeDataManager.saveRecipeToMap(fakeRecipeRepository.getFakeRepo().get(0));
+    }
 
+    private void setListViewOnClickListener()
+    {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -46,15 +55,14 @@ public class HomeFragment extends Fragment {
                 startRecipeViewActivity(recipe);
             }
         });
-
     }
 
     /**
      * Initialize views and other fields
      */
     private void initialize(){
-        listView = view.findViewById(R.id.home_recipeList);
         recipeRepository = RecipeRepository.getRecipeRepository();
+        listView = view.findViewById(R.id.home_recipeList);
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), recipeRepository.getRecipeRepo());
         listView.setAdapter(recipeListAdapter);
         ListViewProcessor.setListViewHeightBasedOnChildren(listView);

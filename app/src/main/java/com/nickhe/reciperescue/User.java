@@ -16,8 +16,8 @@ public class User {
     private String name;
     private String description;
     private String profileImageUri;
-    private ArrayList<Recipe> personalRepo;
-    private ArrayList<String> shoppingList;
+    private ArrayList<Recipe> personalRepo = new ArrayList<>();
+    private ArrayList<String> shoppingList = new ArrayList<>();
 
     public User(){
         this.profileImageUri = "android.resource://com.nickhe.reciperescue/drawable/"+R.drawable.blankproflie;
