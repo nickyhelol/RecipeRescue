@@ -1,6 +1,7 @@
 package com.nickhe.reciperescue;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -57,6 +59,7 @@ public class SearchFragment extends Fragment {
 
         initialize();
         setRecipeSearchViewOnQueryTextListener();
+        setResultListViewOnClickListener();
     }
 
     /**
@@ -128,6 +131,29 @@ public class SearchFragment extends Fragment {
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), results);
         resultListView.setAdapter(recipeListAdapter);
         ListViewProcessor.setListViewHeightBasedOnChildren(resultListView);
+    }
+
+    private void setResultListViewOnClickListener(){
+        resultListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Recipe recipe = results.get(position);
+
+                startRecipeViewActivity(recipe);
+            }
+        });
+    }
+
+
+    /**
+     *
+     * @param recipe
+     */
+    private void startRecipeViewActivity(Recipe recipe)
+    {
+        Intent i = new Intent(getActivity(), RecipeViewActivity.class);
+        i.putExtra("recipe", recipe);
+        startActivity(i);
     }
 
 }
