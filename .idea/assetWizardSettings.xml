@@ -102,7 +102,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_remove_circle_outline_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_more_horiz_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -113,7 +113,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="3ebf6f" />
-                            <entry key="outputName" value="remove_circle" />
+                            <entry key="outputName" value="more_green" />
                             <entry key="sourceFile" value="$USER_HOME$" />
                           </map>
                         </option>

@@ -16,20 +16,31 @@ public class User {
     private String name;
     private String description;
     private String profileImageUri;
-    private ArrayList<Recipe> personalRepo = new ArrayList<>();
+    private ArrayList<String> breakfastsRepo = new ArrayList<>();
+    private ArrayList<String> sidesRepo = new ArrayList<>();
+    private ArrayList<String> dinnersRepo = new ArrayList<>();
+    private ArrayList<String> drinksRepo = new ArrayList<>();
+    private ArrayList<String> dessertsRepo = new ArrayList<>();
     private ArrayList<String> shoppingList = new ArrayList<>();
 
     public User(){
         this.profileImageUri = "android.resource://com.nickhe.reciperescue/drawable/"+R.drawable.blankproflie;
     }
 
-    public User(String name, String description, String profileImageUri, ArrayList<Recipe> personalRepo, ArrayList<String> shoppingList) {
+    public User(String name, String description, String profileImageUri, ArrayList<String> breakfastsRepo,
+                ArrayList<String> sidesRepo, ArrayList<String> dinnersRepo, ArrayList<String> drinksRepo,
+                ArrayList<String> dessertsRepo, ArrayList<String> shoppingList) {
         this.name = name;
         this.description = description;
         this.profileImageUri = profileImageUri;
-        this.personalRepo = personalRepo;
+        this.breakfastsRepo = breakfastsRepo;
+        this.sidesRepo = sidesRepo;
+        this.dinnersRepo = dinnersRepo;
+        this.drinksRepo = drinksRepo;
+        this.dessertsRepo = dessertsRepo;
         this.shoppingList = shoppingList;
     }
+
 
     public String getName() {
         return name;
@@ -55,12 +66,44 @@ public class User {
         this.profileImageUri = profileImageUri;
     }
 
-    public ArrayList<Recipe> getPersonalRepo() {
-        return personalRepo;
+    public ArrayList<String> getBreakfastsRepo() {
+        return breakfastsRepo;
     }
 
-    public void setPersonalRepo(ArrayList<Recipe> personalRepo) {
-        this.personalRepo = personalRepo;
+    public void setBreakfastsRepo(ArrayList<String> breakfastsRepo) {
+        this.breakfastsRepo = breakfastsRepo;
+    }
+
+    public ArrayList<String> getSidesRepo() {
+        return sidesRepo;
+    }
+
+    public void setSidesRepo(ArrayList<String> sidesRepo) {
+        this.sidesRepo = sidesRepo;
+    }
+
+    public ArrayList<String> getDinnersRepo() {
+        return dinnersRepo;
+    }
+
+    public void setDinnersRepo(ArrayList<String> dinnersRepo) {
+        this.dinnersRepo = dinnersRepo;
+    }
+
+    public ArrayList<String> getDrinksRepo() {
+        return drinksRepo;
+    }
+
+    public void setDrinksRepo(ArrayList<String> drinksRepo) {
+        this.drinksRepo = drinksRepo;
+    }
+
+    public ArrayList<String> getDessertsRepo() {
+        return dessertsRepo;
+    }
+
+    public void setDessertsRepo(ArrayList<String> dessertsRepo) {
+        this.dessertsRepo = dessertsRepo;
     }
 
     public ArrayList<String> getShoppingList() {

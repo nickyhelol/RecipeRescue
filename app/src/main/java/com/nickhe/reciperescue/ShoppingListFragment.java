@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.common.base.MoreObjects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +52,7 @@ public class ShoppingListFragment extends Fragment {
         setAddIconImageViewOnClickListener();
         setSearchViewOnQueryTextSubmit();
         setAddItemTextViewOnClickListener();
-        initializeShoppingCarListView();
+        initializeShoppingCartListView();
         setNumberOfItemsView();
     }
 
@@ -75,11 +78,16 @@ public class ShoppingListFragment extends Fragment {
     /**
      * Initialize shopping cart list view
      */
-    private void initializeShoppingCarListView() {
+    private void initializeShoppingCartListView() {
         ShoppingListAdapter shoppingListAdapter =
                 new ShoppingListAdapter(getActivity(), UserDataManager.getUser().getShoppingList());
         shoppingCartListView.setAdapter(shoppingListAdapter);
         ListViewProcessor.setListViewHeightBasedOnChildren(shoppingCartListView);
+    }
+
+    private void updateShoppingCartListView(String query){
+        UserDataManager.getUser().getShoppingList().add(query);
+        initializeShoppingCartListView();
     }
 
     /**
@@ -131,6 +139,14 @@ public class ShoppingListFragment extends Fragment {
         addItemTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String s = searchView.getQuery().toString();
+                if(s != null && s != ""){
+                    updateShoppingCartListView(s);
+                    updateNumberOfItemView(UserDataManager.getUser().getShoppingList());
+                }else {
+                    Toast.makeText(getActivity(), "Input is null", Toast.LENGTH_SHORT);
+                }
                 searchView.setVisibility(View.INVISIBLE);
                 layout.setBackgroundColor(Color.BLACK);
                 addItemTextView.setVisibility(View.INVISIBLE);

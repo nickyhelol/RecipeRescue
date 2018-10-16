@@ -14,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainMenuActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
-    private HomeFragment homeFragment;
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -23,7 +22,7 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         initialize();
-        setFragment(homeFragment);
+        validate();
         setBottomNavigationViewListener();
     }
 
@@ -64,7 +63,23 @@ public class MainMenuActivity extends AppCompatActivity {
     private void initialize(){
         firebaseAuth = FirebaseAuth.getInstance();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        homeFragment = new HomeFragment();
+    }
+
+    /**
+     * Check if the intent extra is true or false.
+     * If it is true then set shopping list fragment,
+     * otherwise set home fragment instead.
+     */
+    private void validate(){
+        Intent i = getIntent();
+        boolean check = i.getBooleanExtra("startShoppingListFragment", false);
+        if(check){
+            setFragment(new ShoppingListFragment());
+            bottomNavigationView.setSelectedItemId(R.id.shoppingList_navigation);
+        }else {
+            setFragment(new HomeFragment());
+            bottomNavigationView.setSelectedItemId(R.id.home_navigation);
+        }
     }
 
     /**

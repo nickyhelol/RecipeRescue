@@ -2,6 +2,8 @@ package com.nickhe.reciperescue;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -21,9 +23,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,20 +41,21 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.channels.spi.AbstractSelectionKey;
+import java.util.ArrayList;
 
 public class ProfileFragment extends Fragment implements TextWatcher {
 
     private User user;
     private View view;
-    private ImageView profileImageView, addNewRecipeIncon;
+    private ImageView profileImageView, addNewRecipeIncon, menuImageView;
+    private ImageView sideImageView, dinnerImageView, drinkImageView, dessertImageView, breakfastImageView;
     private EditText nameEditView, descriptionEditView;
-    private ListView listView;
     private RecipeRepository recipeRepository;
+
     public final int READ_IMAGE_PERMISSION = 0;
     public final int WRITE_IMAGE_PERMISSION = 2;
     public final int PICK_IMAGE_RESULT = 1;
     private FirebaseAuth firebaseAuth;
-    private TextWatcher textWatcher;
 
     public ProfileFragment() {
 
@@ -70,12 +76,31 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         askReadExternalStoragePermission();
         initialize();
         updateView();
+        setMenuImageViewOnClickListener();
         setProfileImageViewListener();
-        setListViewClickListener();
         setAddNewRecipeInconClickListener();
         nameEditView.addTextChangedListener(this);
         descriptionEditView.addTextChangedListener(this);
 
+    }
+
+    /**
+     * Initialize views and other fields
+     */
+    private void initialize() {
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = UserDataManager.getUser();
+        profileImageView = view.findViewById(R.id.profileImageView);
+        addNewRecipeIncon = view.findViewById(R.id.addNewRecipeIcon);
+        nameEditView = view.findViewById(R.id.nameEditText);
+        descriptionEditView = view.findViewById(R.id.descriptionEditText);
+        recipeRepository = RecipeRepository.getRecipeRepository();
+        menuImageView = view.findViewById(R.id.menuImageView);
+        sideImageView = view.findViewById(R.id.sideImageView);
+        breakfastImageView = view.findViewById(R.id.breakfastImageView);
+        dinnerImageView = view.findViewById(R.id.dinnerImageView);
+        drinkImageView = view.findViewById(R.id.drinkImageView);
+        dessertImageView = view.findViewById(R.id.dessertImageView);
     }
 
     /**
@@ -90,19 +115,114 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         });
     }
 
-    /**
-     * To allow users to be able to open a recipe and review that
-     */
-    private void setListViewClickListener() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    private void setMenuImageViewOnClickListener(){
+        menuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Do you want to log out?")
+                        .setCancelable(true)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                logout();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                Recipe recipe = recipeRepository.getRecipeRepo().get(position);
-                sendDataToRecipeViewActivity(recipe);
+                            }
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
     }
+
+    /**
+     * This method will log out the user from the firebase and finish the current activity which is main menu activity and
+     * goes back to the main login activity once log out menu is clicked.
+     */
+    private void logout() {
+        firebaseAuth.signOut();
+        startActivity(new Intent(getActivity(), MainLoginActivity.class));
+    }
+
+    /**
+     * Set onClick listener for breakfastImageView
+     */
+    private void setBreakfastImageViewOnClickListener(){
+        breakfastImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    /**
+     * Set onClick listener for sideImageView
+     */
+    private void setSideImageViewOnClickListener(){
+        sideImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    /**
+     * Set onClick listener for dinnerImageView
+     */
+    private void setDinnerImageViewOnClickListener(){
+        dinnerImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    /**
+     * Set onClick listener for drinkImageView
+     */
+    private void setDrinkImageViewOnClickListener(){
+        drinkImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    /**
+     * Set onClick listener for dessertImageView
+     */
+    private void setDessertImageViewOnClickListener(){
+        dessertImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+
+//    /**
+//     * To allow users to be able to open a recipe and review that
+//     */
+//    private void setListViewClickListener() {
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                Recipe recipe = recipeRepository.getRecipeRepo().get(position);
+//                sendDataToRecipeViewActivity(recipe);
+//            }
+//        });
+//    }
 
     /**
      * Set clickListener to allow users to select image from their phone as the profile image
@@ -141,22 +261,13 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         }
     }
 
-    /**
-     * Initialize views and other fields
-     */
-    private void initialize() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        user = UserDataManager.getUser();
-        profileImageView = view.findViewById(R.id.profileImageView);
-        addNewRecipeIncon = view.findViewById(R.id.addNewRecipeIcon);
-        nameEditView = view.findViewById(R.id.nameEditText);
-        descriptionEditView = view.findViewById(R.id.descriptionEditText);
-        listView = view.findViewById(R.id.profile_recipeList);
-        recipeRepository = RecipeRepository.getRecipeRepository();
-        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), recipeRepository.getRecipeRepo());
-        listView.setAdapter(recipeListAdapter);
-        ListViewProcessor.setListViewHeightBasedOnChildren(listView);
-    }
+
+
+//    private void initializeListView(){
+//        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), personalRepo);
+//        listView.setAdapter(recipeListAdapter);
+//        ListViewProcessor.setListViewHeightBasedOnChildren(listView);
+//    }
 
     /**
      * Update view when userInfo retrieved
@@ -279,7 +390,7 @@ public class ProfileFragment extends Fragment implements TextWatcher {
      * @param recipe
      */
     private void sendDataToRecipeViewActivity(Recipe recipe) {
-        Intent i = new Intent(getActivity().getBaseContext(), RecipeViewActivity.class);
+        Intent i = new Intent(getActivity(), RecipeViewActivity.class);
         i.putExtra("recipe", recipe);
         startActivity(i);
     }
