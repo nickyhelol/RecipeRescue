@@ -17,6 +17,7 @@
         android:layout_marginBottom="8dp"
         android:alpha="0.8"
         android:background="@drawable/button"
+        android:clickable="false"
         android:fontFamily="@font/amita"
         android:onClick="login"
         android:text="Sign In"

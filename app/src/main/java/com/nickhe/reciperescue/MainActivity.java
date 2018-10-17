@@ -1,7 +1,9 @@
 package com.nickhe.reciperescue;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -15,7 +17,9 @@ import android.view.View;
  */
 public class MainActivity extends AppCompatActivity {
 
-    RecipeRepository recipeRepository;
+    private RecipeRepository recipeRepository;
+    private ProgressDialog progressDialog;
+
     /**
      * The login method starts the MainLoginActivity activity and switches to it.
      *
@@ -39,7 +43,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initialize();
+    }
+
+    private void initialize(){
         recipeRepository = RecipeRepository.getRecipeRepository();
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+
+        Runnable progressRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+            }
+        };
+
+        Handler pdCanceller = new Handler();
+        pdCanceller.postDelayed(progressRunnable, 3000);
     }
 
 }
