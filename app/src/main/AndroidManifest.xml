@@ -40,7 +40,8 @@
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".CreateRecipeActivity"></activity>
+        <activity android:name=".CreateRecipeActivity" />
+        <activity android:name=".CollectionActivity"></activity>
     </application>
 
 </manifest>

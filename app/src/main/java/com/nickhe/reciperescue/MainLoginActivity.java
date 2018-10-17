@@ -49,7 +49,7 @@ public class MainLoginActivity extends AppCompatActivity {
         setForgotPasswordTextViewOnClickListener();
 
         firebaseAuth = FirebaseAuth.getInstance();
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(MainLoginActivity.this);
 
         checkCurrentUser();
 

@@ -42,14 +42,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.ByteArrayOutputStream;
 import java.nio.channels.spi.AbstractSelectionKey;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class ProfileFragment extends Fragment implements TextWatcher {
 
-    private User user;
     private View view;
-    private ImageView profileImageView, addNewRecipeIncon, menuImageView;
+    private ImageView profileImageView, menuImageView;
     private ImageView sideImageView, dinnerImageView, drinkImageView, dessertImageView, breakfastImageView;
     private EditText nameEditView, descriptionEditView;
+    private TextView breakfastTextView, sidesTextView, dinnerTextView, drinkTextView, dessertTextView;
     private RecipeRepository recipeRepository;
 
     public final int READ_IMAGE_PERMISSION = 0;
@@ -73,15 +74,19 @@ public class ProfileFragment extends Fragment implements TextWatcher {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        askReadExternalStoragePermission();
+        //askReadExternalStoragePermission();
         initialize();
-        updateView();
+        updateUserProfileView();
+        updateCollectionViews();
         setMenuImageViewOnClickListener();
         setProfileImageViewListener();
-        setAddNewRecipeInconClickListener();
         nameEditView.addTextChangedListener(this);
         descriptionEditView.addTextChangedListener(this);
-
+        setBreakfastImageViewOnClickListener();
+        setSideImageViewOnClickListener();
+        setDinnerImageViewOnClickListener();
+        setDrinkImageViewOnClickListener();
+        setDessertImageViewOnClickListener();
     }
 
     /**
@@ -89,9 +94,7 @@ public class ProfileFragment extends Fragment implements TextWatcher {
      */
     private void initialize() {
         firebaseAuth = FirebaseAuth.getInstance();
-        user = UserDataManager.getUser();
         profileImageView = view.findViewById(R.id.profileImageView);
-        addNewRecipeIncon = view.findViewById(R.id.addNewRecipeIcon);
         nameEditView = view.findViewById(R.id.nameEditText);
         descriptionEditView = view.findViewById(R.id.descriptionEditText);
         recipeRepository = RecipeRepository.getRecipeRepository();
@@ -101,20 +104,16 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         dinnerImageView = view.findViewById(R.id.dinnerImageView);
         drinkImageView = view.findViewById(R.id.drinkImageView);
         dessertImageView = view.findViewById(R.id.dessertImageView);
+        breakfastTextView = view.findViewById(R.id.breakfastTextView);
+        sidesTextView = view.findViewById(R.id.sideTextView);
+        dinnerTextView = view.findViewById(R.id.dinnerTextView);
+        drinkTextView = view.findViewById(R.id.drinkTextView);
+        dessertTextView = view.findViewById(R.id.dessertTextView);
     }
 
     /**
-     * To all users to be able to submit a new recipe
+     * Set OnClickListener for menuImageView to allow user to log out
      */
-    private void setAddNewRecipeInconClickListener() {
-        addNewRecipeIncon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), CreateRecipeActivity.class));
-            }
-        });
-    }
-
     private void setMenuImageViewOnClickListener(){
         menuImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,8 +154,7 @@ public class ProfileFragment extends Fragment implements TextWatcher {
     private void setBreakfastImageViewOnClickListener(){
         breakfastImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View v) { startCollectionActivity(1);
             }
         });
     }
@@ -168,7 +166,7 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         sideImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startCollectionActivity(2);
             }
         });
     }
@@ -180,7 +178,7 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         dinnerImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startCollectionActivity(3);
             }
         });
     }
@@ -192,7 +190,7 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         drinkImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startCollectionActivity(4);
             }
         });
     }
@@ -204,25 +202,45 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         dessertImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startCollectionActivity(5);
             }
         });
     }
 
+    /**
+     * Start CollectionActivity
+     * @param index
+     */
+    private void startCollectionActivity(int index){
+        Intent i = new Intent(getActivity(), CollectionActivity.class);
+        i.putExtra("collection", index);
+        startActivity(i);
+    }
 
-//    /**
-//     * To allow users to be able to open a recipe and review that
-//     */
-//    private void setListViewClickListener() {
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                Recipe recipe = recipeRepository.getRecipeRepo().get(position);
-//                sendDataToRecipeViewActivity(recipe);
-//            }
-//        });
-//    }
+    /**
+     * Update the collection views
+     */
+    private void updateCollectionViews(){
+        if(UserDataManager.getUser().getBreakfastsRepo() != null){
+            breakfastTextView.setText(String.valueOf(UserDataManager.getUser().getBreakfastsRepo().size()));
+        }
+
+        if(UserDataManager.getUser().getSidesRepo() != null){
+            sidesTextView.setText(String.valueOf(UserDataManager.getUser().getSidesRepo().size()));
+        }
+
+        if(UserDataManager.getUser().getDinnersRepo() != null){
+            dinnerTextView.setText(String.valueOf(UserDataManager.getUser().getDinnersRepo().size()));
+        }
+
+        if(UserDataManager.getUser().getDrinksRepo() != null){
+            drinkTextView.setText(String.valueOf(UserDataManager.getUser().getDrinksRepo().size()));
+        }
+
+        if(UserDataManager.getUser().getDessertsRepo() != null){
+            dessertTextView.setText(String.valueOf(UserDataManager.getUser().getDessertsRepo().size()));
+        }
+    }
 
     /**
      * Set clickListener to allow users to select image from their phone as the profile image
@@ -261,22 +279,14 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         }
     }
 
-
-
-//    private void initializeListView(){
-//        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(getActivity(), personalRepo);
-//        listView.setAdapter(recipeListAdapter);
-//        ListViewProcessor.setListViewHeightBasedOnChildren(listView);
-//    }
-
     /**
      * Update view when userInfo retrieved
      */
-    private void updateView() {
-        Uri uri = Uri.parse(user.getProfileImage());
+    private void updateUserProfileView() {
+        Uri uri = Uri.parse(UserDataManager.getUser().getProfileImage());
         Bitmap bitmap = ImageProcessor.convertUriToBitmap(getActivity(), uri);
-        String userName = user.getName();
-        String description = user.getDescription();
+        String userName = UserDataManager.getUser().getName();
+        String description = UserDataManager.getUser().getDescription();
 
         profileImageView.setImageBitmap(bitmap);
         nameEditView.setText(userName);
@@ -360,8 +370,8 @@ public class ProfileFragment extends Fragment implements TextWatcher {
      * @param path
      */
     private void updateUserImage(String path) {
-        user.setProfileImage(path);
-        UserDataManager.setUser(user);
+        UserDataManager.getUser().setProfileImage(path);
+        UserDataManager.setUser(UserDataManager.getUser());
         UserDataManager.updateUserToFirebase(firebaseAuth);
 
     }
@@ -370,8 +380,8 @@ public class ProfileFragment extends Fragment implements TextWatcher {
      * Update user name to firebase
      */
     private void updateUserName(String name) {
-        user.setName(name);
-        UserDataManager.setUser(user);
+        UserDataManager.getUser().setName(name);
+        UserDataManager.setUser(UserDataManager.getUser());
         UserDataManager.updateUserToFirebase(firebaseAuth);
     }
 
@@ -379,20 +389,9 @@ public class ProfileFragment extends Fragment implements TextWatcher {
      * Update user description to firebase
      */
     private void updateUserDescription(String description) {
-        user.setDescription(description);
-        UserDataManager.setUser(user);
+        UserDataManager.getUser().setDescription(description);
+        UserDataManager.setUser(UserDataManager.getUser());
         UserDataManager.updateUserToFirebase(firebaseAuth);
-    }
-
-    /**
-     * Start RecipeViewActivity when recipe clicked
-     *
-     * @param recipe
-     */
-    private void sendDataToRecipeViewActivity(Recipe recipe) {
-        Intent i = new Intent(getActivity(), RecipeViewActivity.class);
-        i.putExtra("recipe", recipe);
-        startActivity(i);
     }
 
     @Override

@@ -45,6 +45,7 @@ public class RecipeViewActivity extends AppCompatActivity implements NavigationV
 
         receiveData();
         initializeView();
+
         updateView();
         initializeIngredientListView();
         initializeInstructionTextView();
@@ -200,50 +201,87 @@ public class RecipeViewActivity extends AppCompatActivity implements NavigationV
     private void saveRecipeToCollection(int i){
         switch (i){
             case 1:
-                if(UserDataManager.getUser().getBreakfastsRepo().contains(recipe.getRecipeTitle())){
-                    Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
-                }else {
-                    UserDataManager.getUser().getBreakfastsRepo().add(recipe.getRecipeTitle());
-                    Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
-                }
-                UserDataManager.updateUserToFirebase(FirebaseAuth.getInstance());
+                saveToBreakfasts();
                 break;
             case 2:
-                if(UserDataManager.getUser().getSidesRepo().contains(recipe.getRecipeTitle())){
-                    Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
-                }else {
-                    UserDataManager.getUser().getSidesRepo().add(recipe.getRecipeTitle());
-                    Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
-                }
-                UserDataManager.updateUserToFirebase(FirebaseAuth.getInstance());
+                saveToSides();
                 break;
             case 3:
-                if(UserDataManager.getUser().getDinnersRepo().contains(recipe.getRecipeTitle())){
-                    Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
-                }else {
-                    UserDataManager.getUser().getDinnersRepo().add(recipe.getRecipeTitle());
-                    Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
-                }
-                UserDataManager.updateUserToFirebase(FirebaseAuth.getInstance());
+                saveToDinners();
                 break;
             case 4:
-                if(UserDataManager.getUser().getDrinksRepo().contains(recipe.getRecipeTitle())){
-                    Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
-                }else {
-                    UserDataManager.getUser().getDrinksRepo().add(recipe.getRecipeTitle());
-                    Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
-                }
-                UserDataManager.updateUserToFirebase(FirebaseAuth.getInstance());
+                saveToDrinks();
                 break;
             case 5:
-                if(UserDataManager.getUser().getDessertsRepo().contains(recipe.getRecipeTitle())){
-                    Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
-                }else {
-                    UserDataManager.getUser().getDessertsRepo().add(recipe.getRecipeTitle());
-                    Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
-                }
+                saveToDesserts();
                 break;
         }
         updateUserDb();
     }
+
+    /**
+     * Save recipe to breakfast collection
+     */
+    private void saveToBreakfasts(){
+        if(UserDataManager.getUser().getBreakfastsRepo().contains(recipe.getRecipeTitle())){
+            Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
+        }else {
+            UserDataManager.getUser().getBreakfastsRepo().add(recipe.getRecipeTitle());
+            Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
+        }
+        UserDataManager.updateUserToFirebase(FirebaseAuth.getInstance());
+    }
+
+    /**
+     * Save recipe to sides collection
+     */
+    private void saveToSides(){
+        if(UserDataManager.getUser().getSidesRepo().contains(recipe.getRecipeTitle())){
+            Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
+        }else {
+            UserDataManager.getUser().getSidesRepo().add(recipe.getRecipeTitle());
+            Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
+        }
+        UserDataManager.updateUserToFirebase(FirebaseAuth.getInstance());
+    }
+
+
+    /**
+     * Save recipe to dinners collection
+     */
+    private void saveToDinners(){
+        if(UserDataManager.getUser().getDinnersRepo().contains(recipe.getRecipeTitle())){
+            Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
+        }else {
+            UserDataManager.getUser().getDinnersRepo().add(recipe.getRecipeTitle());
+            Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
+        }
+        UserDataManager.updateUserToFirebase(FirebaseAuth.getInstance());
+    }
+
+    /**
+     * Save recipe to drinks collection
+     */
+    private void saveToDrinks(){
+        if(UserDataManager.getUser().getDrinksRepo().contains(recipe.getRecipeTitle())){
+            Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
+        }else {
+            UserDataManager.getUser().getDrinksRepo().add(recipe.getRecipeTitle());
+            Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
+        }
+        UserDataManager.updateUserToFirebase(FirebaseAuth.getInstance());
+    }
+
+    /**
+     * Save recipe to desserts collection
+     */
+    private void saveToDesserts(){
+        if(UserDataManager.getUser().getDessertsRepo().contains(recipe.getRecipeTitle())){
+            Toast.makeText(getApplicationContext(), "Already added in collection", Toast.LENGTH_SHORT).show();
+        }else {
+            UserDataManager.getUser().getDessertsRepo().add(recipe.getRecipeTitle());
+            Toast.makeText(getApplicationContext(), "Successfully added!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
+

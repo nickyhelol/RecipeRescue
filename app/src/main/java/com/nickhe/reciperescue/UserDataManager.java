@@ -55,7 +55,7 @@ public class UserDataManager {
         databaseReference.setValue(user);
     }
 
-    public static User getUser() {
+    public synchronized static User getUser() {
 
         return user;
     }
