@@ -4,15 +4,6 @@ A recipe sharing application which is designed to encourage people to share thei
 ## Demo
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/vE6-ph5U-7k/0.jpg)](https://www.youtube.com/watch?v=vE6-ph5U-7k)
- <img src="images/appbg.png" width="300">
- <img src="images/signup.png" width="300">
- <img src="images/signin.png" width="300">
- <img src="images/img3.png" width="300">
- <img src="images/viewrecipe.png" width="300">
- <img src="images/search.png" width="300">
- <img src="images/img6.png" width="300">
- <img src="images/img7.png" width="300">
- <img src="images/shoppinglist.png" width="300">
 
 ## Features
 
