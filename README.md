@@ -3,7 +3,8 @@ A recipe sharing application which is designed to encourage people to share thei
 
 ## Demo
 
-[![IMAGE ALT TEXT HERE](https://i.imgur.com/FTNRc4i.png)](https://www.youtube.com/watch?v=vE6-ph5U-7k)
+Click the video below
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/vE6-ph5U-7k/0.jpg)](https://www.youtube.com/watch?v=vE6-ph5U-7k)
 
 ## Features
 
