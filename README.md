@@ -1,5 +1,5 @@
 # Recipe Rescue
-A recipe sharing application which is designed to encourage people to share their own recipes and get some rewards back. It aims to build a food social community.
+A food recipe application which is designed to allow users to save the recipes into different collections and add ingredients to the shopping cart.
 
 ## Demo
 Click the video below
@@ -8,10 +8,11 @@ Click the video below
 
 ## Features
 
-- Using firebase to administrate the user account info
-- Hosted recipe database on Firebase
+- Using Firebase to administrate the user account info
+- Hosted recipe database in the cloud-database on Firebase
+- Custom list array adapters to populate different listviews
 - Well designed layouts to display a nice interface to users
-- Automatically save changes you make in each acticities
+- Automatically save changes you make in each acticity
 
 ## Tech Stack
 
