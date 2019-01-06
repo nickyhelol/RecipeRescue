@@ -1,5 +1,6 @@
 package com.nickhe.reciperescue;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -38,7 +39,6 @@ public class MainLoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -115,8 +115,7 @@ public class MainLoginActivity extends AppCompatActivity {
         if (firebaseUser != null) {
             //UserDataManager.sendUserDataToDatabase(firebaseAuth);
             UserDataManager.retrieveUser(firebaseAuth);
-            finish();
-            startActivity(new Intent(MainLoginActivity.this, MainMenuActivity.class));
+            System.out.println("Succesfully retrieved user info");
         }
     }
 
@@ -142,7 +141,8 @@ public class MainLoginActivity extends AppCompatActivity {
             errorTextView.setText("");
             progressDialog.setMessage("Logging in");
             progressDialog.show();
-            firebaseAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            firebaseAuth.signInWithEmailAndPassword(userEmail, userPassword)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
@@ -170,7 +170,6 @@ public class MainLoginActivity extends AppCompatActivity {
         if (flag) {
             //UserDataManager.sendUserDataToDatabase(firebaseAuth);
             UserDataManager.retrieveUser(firebaseAuth);
-            finish();
             startActivity(new Intent(MainLoginActivity.this, MainMenuActivity.class));
         } else {
             Toast.makeText(this, "Please verify your email", Toast.LENGTH_SHORT).show();

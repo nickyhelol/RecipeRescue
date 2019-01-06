@@ -74,7 +74,7 @@ public class ProfileFragment extends Fragment implements TextWatcher {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //askReadExternalStoragePermission();
+        askReadExternalStoragePermission();
         initialize();
         updateUserProfileView();
         updateCollectionViews();
@@ -283,14 +283,19 @@ public class ProfileFragment extends Fragment implements TextWatcher {
      * Update view when userInfo retrieved
      */
     private void updateUserProfileView() {
-        Uri uri = Uri.parse(UserDataManager.getUser().getProfileImage());
-        Bitmap bitmap = ImageProcessor.convertUriToBitmap(getActivity(), uri);
-        String userName = UserDataManager.getUser().getName();
-        String description = UserDataManager.getUser().getDescription();
 
-        profileImageView.setImageBitmap(bitmap);
-        nameEditView.setText(userName);
-        descriptionEditView.setText(description);
+        if(UserDataManager.getUser()!=null){
+            Uri uri = Uri.parse(UserDataManager.getUser().getProfileImage());
+            Bitmap bitmap = ImageProcessor.convertUriToBitmap(getActivity(), uri);
+            profileImageView.setImageBitmap(bitmap);
+            String userName = UserDataManager.getUser().getName();
+            String description = UserDataManager.getUser().getDescription();
+
+            nameEditView.setText(userName);
+            descriptionEditView.setText(description);
+        }
+
+
     }
 
     /**
