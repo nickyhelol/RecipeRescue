@@ -56,7 +56,9 @@ public class UserDataManager {
     }
 
     public synchronized static User getUser() {
+        if(user == null){
 
+        }
         return user;
     }
 
