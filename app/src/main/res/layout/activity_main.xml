@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="250dp"
-    tools:context=".MainActivity">
+    tools:context=".Controllers.MainActivity">
 
     <Button
         android:id="@+id/signInBtn"

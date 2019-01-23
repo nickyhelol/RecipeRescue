@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 
 import android.content.Intent;
@@ -11,6 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.nickhe.reciperescue.Models.FakeRecipeRepository;
+import com.nickhe.reciperescue.Models.ListViewProcessor;
+import com.nickhe.reciperescue.R;
+import com.nickhe.reciperescue.Models.Recipe;
+import com.nickhe.reciperescue.Models.RecipeDataManager;
+import com.nickhe.reciperescue.Models.RecipeListAdapter;
+import com.nickhe.reciperescue.Models.RecipeRepository;
 
 
 public class HomeFragment extends Fragment {

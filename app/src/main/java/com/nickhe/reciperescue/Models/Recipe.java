@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Models;
 
 import android.net.Uri;
 import android.os.Parcel;

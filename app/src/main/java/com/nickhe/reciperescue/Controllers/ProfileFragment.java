@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 import android.Manifest;
 import android.app.Activity;
@@ -22,27 +22,18 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.nickhe.reciperescue.Models.ImageProcessor;
+import com.nickhe.reciperescue.R;
+import com.nickhe.reciperescue.Models.RecipeRepository;
+import com.nickhe.reciperescue.Models.UserDataManager;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.channels.spi.AbstractSelectionKey;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class ProfileFragment extends Fragment implements TextWatcher {
 

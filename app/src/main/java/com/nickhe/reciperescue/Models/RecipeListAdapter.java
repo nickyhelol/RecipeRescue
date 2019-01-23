@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Models;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.nickhe.reciperescue.Models.ImageProcessor;
+import com.nickhe.reciperescue.Models.Recipe;
+import com.nickhe.reciperescue.R;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 
 import android.graphics.Color;
@@ -16,10 +16,12 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.base.MoreObjects;
+import com.nickhe.reciperescue.Models.ListViewProcessor;
+import com.nickhe.reciperescue.R;
+import com.nickhe.reciperescue.Models.ShoppingListAdapter;
+import com.nickhe.reciperescue.Models.UserDataManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ShoppingListFragment extends Fragment {
 

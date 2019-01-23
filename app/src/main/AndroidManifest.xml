@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Controllers.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,18 +30,18 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".MainMenuActivity" />
-        <activity android:name=".ForgotPasswordActivity" />
-        <activity android:name=".MainLoginActivity" />
-        <activity android:name=".PasswordUpdate" />
-        <activity android:name=".RegisterToFirebaseActivity" />
-        <activity android:name=".RecipeViewActivity" />
-        <activity android:name=".TestActivity" />
+        <activity android:name=".Controllers.MainMenuActivity" />
+        <activity android:name=".Controllers.ForgotPasswordActivity" />
+        <activity android:name=".Controllers.MainLoginActivity" />
+        <activity android:name=".Controllers.PasswordUpdate" />
+        <activity android:name=".Controllers.RegisterToFirebaseActivity" />
+        <activity android:name=".Controllers.RecipeViewActivity" />
+        <activity android:name=".Controllers.TestActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
-        <activity android:name=".CreateRecipeActivity" />
-        <activity android:name=".CollectionActivity"></activity>
+        <activity android:name=".Controllers.CreateRecipeActivity" />
+        <activity android:name=".Controllers.CollectionActivity"></activity>
     </application>
 
 </manifest>

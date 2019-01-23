@@ -3,6 +3,8 @@ package com.nickhe.reciperescue;
 import android.app.Activity;
 import android.os.Looper;
 
+import com.nickhe.reciperescue.Models.Recipe;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,5 +1,7 @@
 package com.nickhe.reciperescue;
 
+import com.nickhe.reciperescue.Models.Recipe;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

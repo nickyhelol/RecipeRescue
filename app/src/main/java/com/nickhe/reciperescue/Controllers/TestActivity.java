@@ -1,7 +1,9 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.nickhe.reciperescue.R;
 
 public class TestActivity extends AppCompatActivity {
 
