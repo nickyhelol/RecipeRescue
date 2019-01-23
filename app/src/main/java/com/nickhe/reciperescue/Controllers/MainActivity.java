@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.nickhe.reciperescue.R;
+import com.nickhe.reciperescue.Models.RecipeRepository;
 
 /**
  * MainActivity is the menu the user would see after they started the application. It should have two
@@ -61,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        Handler pdCanceller = new Handler();
-        pdCanceller.postDelayed(progressRunnable, 3000);
+        Handler pbCanceller = new Handler();
+        pbCanceller.postDelayed(progressRunnable, 3000);
     }
 
 }

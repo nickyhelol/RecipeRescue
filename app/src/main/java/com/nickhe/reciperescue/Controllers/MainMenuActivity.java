@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.nickhe.reciperescue.R;
 
 public class MainMenuActivity extends AppCompatActivity {
 

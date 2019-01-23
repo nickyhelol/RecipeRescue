@@ -1,7 +1,9 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Models;
 
 import android.app.Activity;
 import android.net.Uri;
+
+import com.nickhe.reciperescue.R;
 
 import java.util.ArrayList;
 import java.util.List;

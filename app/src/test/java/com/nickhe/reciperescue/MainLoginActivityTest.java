@@ -1,5 +1,7 @@
 package com.nickhe.reciperescue;
 
+import com.nickhe.reciperescue.Controllers.MainLoginActivity;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;

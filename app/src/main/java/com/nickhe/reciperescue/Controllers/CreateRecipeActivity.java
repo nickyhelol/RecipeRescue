@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +17,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.nickhe.reciperescue.R;
+import com.nickhe.reciperescue.Models.Recipe;
 
 import java.util.Arrays;
 import java.util.HashMap;

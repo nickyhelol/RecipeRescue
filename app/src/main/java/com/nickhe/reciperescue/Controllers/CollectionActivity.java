@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,13 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.nickhe.reciperescue.Models.ListViewProcessor;
+import com.nickhe.reciperescue.R;
+import com.nickhe.reciperescue.Models.Recipe;
+import com.nickhe.reciperescue.Models.RecipeListAdapter;
+import com.nickhe.reciperescue.Models.RecipeRepository;
+import com.nickhe.reciperescue.Models.UserDataManager;
 
 import java.util.ArrayList;
 

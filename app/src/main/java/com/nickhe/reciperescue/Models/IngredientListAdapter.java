@@ -1,7 +1,6 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Models;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.nickhe.reciperescue.Controllers.RecipeViewActivity;
+import com.nickhe.reciperescue.R;
 
 public class IngredientListAdapter extends ArrayAdapter<String> {
 

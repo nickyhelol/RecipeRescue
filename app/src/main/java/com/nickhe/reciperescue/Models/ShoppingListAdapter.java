@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Models;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -10,9 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.nickhe.reciperescue.Controllers.ShoppingListFragment;
+import com.nickhe.reciperescue.R;
 
 import java.util.ArrayList;
 

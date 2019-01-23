@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.nickhe.reciperescue.R;
+import com.nickhe.reciperescue.Models.UserDataManager;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

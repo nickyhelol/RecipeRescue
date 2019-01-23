@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Models;
 
 public enum Rating {
     ONE(1), TWO(2), THREE(3), FOUR(4), FIVE(5);

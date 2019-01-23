@@ -1,4 +1,4 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Models;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -12,6 +12,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.nickhe.reciperescue.Models.Rating;
+import com.nickhe.reciperescue.Models.Recipe;
 
 import java.util.ArrayList;
 import java.util.Arrays;

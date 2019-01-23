@@ -1,28 +1,28 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Controllers;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.nickhe.reciperescue.Models.ImageProcessor;
+import com.nickhe.reciperescue.Models.IngredientListAdapter;
+import com.nickhe.reciperescue.Models.ListViewProcessor;
+import com.nickhe.reciperescue.R;
+import com.nickhe.reciperescue.Models.Recipe;
+import com.nickhe.reciperescue.Models.UserDataManager;
 
 import java.util.ArrayList;
 

@@ -1,18 +1,15 @@
 package com.nickhe.reciperescue;
 
 import android.support.test.rule.ActivityTestRule;
-import android.support.v4.app.Fragment;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
+
+import com.nickhe.reciperescue.Controllers.HomeFragment;
+import com.nickhe.reciperescue.Controllers.TestActivity;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
-import java.util.List;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.*;

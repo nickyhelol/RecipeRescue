@@ -1,6 +1,5 @@
-package com.nickhe.reciperescue;
+package com.nickhe.reciperescue.Models;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;

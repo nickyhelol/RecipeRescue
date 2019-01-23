@@ -3,6 +3,10 @@ package com.nickhe.reciperescue;
 import android.support.test.rule.ActivityTestRule;
 import android.widget.RelativeLayout;
 
+import com.nickhe.reciperescue.Controllers.HomeFragment;
+import com.nickhe.reciperescue.Controllers.ProfileFragment;
+import com.nickhe.reciperescue.Controllers.TestActivity;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
